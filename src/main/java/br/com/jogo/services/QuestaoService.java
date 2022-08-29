@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import br.com.jogo.services.exceptions.ObjectNotFoundException;
 public class QuestaoService {
 
 	@Autowired
-	QuestaoRepository repository;
+	private QuestaoRepository repository;
 
 	public Questao find(Integer id) {
 		Optional<Questao> obj = repository.findById(id);
@@ -58,7 +57,7 @@ public class QuestaoService {
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possivel excluir uma categoria que possui estabelecimentos");
+			throw new DataIntegrityException("Não é possivel excluir uma questão que possui alternativas");
 		} catch (ObjectNotFoundException e) {
 		}
 	}
