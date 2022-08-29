@@ -1,7 +1,9 @@
 package br.com.jogo.domain;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,12 +22,15 @@ public class Jogador extends Usuario {
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "jogador_id")
 	private List<RegistroPartida> partidas;
-	
+	@OneToMany(mappedBy = "id.jogador")
+	private Set<ItemJogador> itens = new HashSet<>();
+
 	public Jogador() {
 	}
 
 	public Jogador(Integer id, String nome, String nomeUsuario, String email, String senha, int pontuacao,
-			int numeroPartidas, int pontuacaoTotal, int saldo, LocalDate ultimoAcesso, int qtdAcessosContinuo, List<RegistroPartida> partidas) {
+			int numeroPartidas, int pontuacaoTotal, int saldo, LocalDate ultimoAcesso, int qtdAcessosContinuo,
+			List<RegistroPartida> partidas) {
 		super(id, nome, nomeUsuario, email, senha);
 		this.qtdPartidas = numeroPartidas;
 		this.pontuacaoTotal = pontuacaoTotal;

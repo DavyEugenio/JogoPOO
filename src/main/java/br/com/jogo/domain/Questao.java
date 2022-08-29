@@ -1,7 +1,6 @@
 package br.com.jogo.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,13 +31,17 @@ public class Questao implements Serializable {
 
 	public Questao() {
 	}
-
-	public Questao(Integer id, String texto, int nivel) {
-		super();
-		this.id = id;
+	
+	public Questao(String texto, int nivel, Categoria categoria, List<Alternativa> alternativas) {
 		this.texto = texto;
 		this.nivel = nivel;
-		this.alternativas = new ArrayList<>();
+		this.categoria = categoria;
+		this.alternativas = alternativas;
+	}
+	
+	public Questao(Integer id, String texto, int nivel, Categoria categoria, List<Alternativa> alternativas) {
+		this(texto, nivel, categoria, alternativas);
+		this.id = id;
 	}
 
 	public Integer getId() {
