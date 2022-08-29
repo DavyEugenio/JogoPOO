@@ -22,6 +22,9 @@ public class RegistroPartida implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private LocalDateTime momento;
+	@ManyToOne
+	@JoinColumn(name = "ultimaquestao_id")
+	private Questao ultimaQuestao;
 	private boolean ativa;
 	private int pontuacao;
 	@ManyToOne
@@ -38,7 +41,7 @@ public class RegistroPartida implements Serializable {
 		this.pontuacao = 0;
 	}
 
-	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao) {
+	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao) {
 		this.id = id;
 		this.momento = momento;
 		this.ativa = ativa;

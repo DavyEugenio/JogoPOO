@@ -3,8 +3,8 @@ package br.com.jogo.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.jogo.domain.ConfiguracaoPartida;
+import br.com.jogo.domain.Item;
 
 @Repository
-public interface PartidaRepository extends JpaRepository<ConfiguracaoPartida, Integer> {	
+public interface ItemRepository extends JpaRepository<Item, Integer> {	
 }
