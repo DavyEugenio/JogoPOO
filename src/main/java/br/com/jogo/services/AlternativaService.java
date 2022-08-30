@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Alternativa;
+import br.com.jogo.dto.AlternativaNewDTO;
 import br.com.jogo.repositories.AlternativaRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -41,7 +43,7 @@ public class AlternativaService {
 		if (obj.getTexto() != null) {
 			aux.setTexto(obj.getTexto());
 		}
-			aux.setCorreta(obj.isCorreta());
+		aux.setCorreta(obj.isCorreta());
 	}
 
 	public void delete(Integer id) {
@@ -57,8 +59,9 @@ public class AlternativaService {
 	public List<Alternativa> findAll() {
 		return repository.findAll();
 	}
-	/*
-	 * public Alternativa fromDTO(AlternativaDTO catDto) { return new
-	 * Alternativa(catDto.getId(), catDto.getDescricao()); }
-	 */
+
+	public Alternativa fromDTO(AlternativaNewDTO objNewDto) {
+		return new Alternativa(objNewDto.getTexto(), objNewDto.isCorreta());
+	}
+
 }

@@ -30,7 +30,6 @@ public abstract class Usuario implements Serializable {
 	private String senha;
 
 	public Usuario() {
-
 	}
 
 	public Usuario(String nome, String nomeUsuario, String email, String senha) {

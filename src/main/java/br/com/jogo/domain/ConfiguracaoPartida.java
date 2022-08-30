@@ -1,9 +1,8 @@
 package br.com.jogo.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,24 +25,20 @@ public class ConfiguracaoPartida implements Serializable {
 	private boolean predefinida;
 	@OneToMany
 	@JoinColumn(name = "configuracaopartida_id")
-	private List<RegistroPartida> registroPartidas;
+	private Set<RegistroPartida> registroPartidas;
 	@ManyToOne
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = { @JoinColumn(name = "partida_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "questao_id") })
-	private List<Questao> questoes;
+	private Set<Questao> questoes;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = { @JoinColumn(name = "partida_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "categoria_id") })
-	private List<Categoria> categorias;
-
-	public ConfiguracaoPartida() {
-		this.categorias = new ArrayList<>();
-	}
+	private Set<Categoria> categorias;
 	
-	public ConfiguracaoPartida(List<Categoria> categorias) {
+	public ConfiguracaoPartida(Set<Categoria> categorias) {
 		this.categorias = categorias;
 	}
 
@@ -58,19 +53,19 @@ public class ConfiguracaoPartida implements Serializable {
 		this.jogador = jogador;
 	}
 
-	public ConfiguracaoPartida(Integer id, List<Questao> questoes) {
+	public ConfiguracaoPartida(Integer id, Set<Questao> questoes) {
 		this.id = id;
 		this.questoes = questoes;
-		this.categorias = questoes.stream().map(q -> q.getCategoria()).toList();
+		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
 	}
 
-	public ConfiguracaoPartida(Integer id, int nivel, Jogador jogador, List<Questao> questoes) {
+	public ConfiguracaoPartida(Integer id, int nivel, Jogador jogador, Set<Questao> questoes) {
 		this.id = id;
 		this.nivel = nivel;
 		this.jogador = jogador;
 		this.questoes = questoes;
 		this.predefinida = true;
-		this.categorias = questoes.stream().map(q -> q.getCategoria()).toList();
+		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
 	}
 
 	public Integer getId() {
@@ -97,11 +92,11 @@ public class ConfiguracaoPartida implements Serializable {
 		this.predefinida = predefinida;
 	}
 
-	public List<RegistroPartida> getRegistroPartidas() {
+	public Set<RegistroPartida> getRegistroPartidas() {
 		return registroPartidas;
 	}
 
-	public void setRegistroPartidas(List<RegistroPartida> registroPartidas) {
+	public void setRegistroPartidas(Set<RegistroPartida> registroPartidas) {
 		this.registroPartidas = registroPartidas;
 	}
 
@@ -113,19 +108,19 @@ public class ConfiguracaoPartida implements Serializable {
 		this.jogador = jogador;
 	}
 
-	public List<Questao> getQuestoes() {
+	public Set<Questao> getQuestoes() {
 		return questoes;
 	}
 
-	public void setQuestoes(List<Questao> questoes) {
+	public void setQuestoes(Set<Questao> questoes) {
 		this.questoes = questoes;
 	}
 
-	public List<Categoria> getCategorias() {
+	public Set<Categoria> getCategorias() {
 		return categorias;
 	}
 
-	public void setCategorias(List<Categoria> categorias) {
+	public void setCategorias(Set<Categoria> categorias) {
 		this.categorias = categorias;
 	}
 

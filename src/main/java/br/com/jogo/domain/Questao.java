@@ -1,7 +1,7 @@
 package br.com.jogo.domain;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -25,7 +25,7 @@ public class Questao implements Serializable {
 	private int nivel;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "questao_id")
-	private List<Alternativa> alternativas;
+	private Set<Alternativa> alternativas;
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
@@ -33,14 +33,14 @@ public class Questao implements Serializable {
 	public Questao() {
 	}
 	
-	public Questao(String texto, int nivel, Categoria categoria, List<Alternativa> alternativas) {
+	public Questao(String texto, int nivel, Categoria categoria, Set<Alternativa> alternativas) {
 		this.texto = texto;
 		this.nivel = nivel;
 		this.categoria = categoria;
 		this.alternativas = alternativas;
 	}
 	
-	public Questao(Integer id, String texto, int nivel, Categoria categoria, List<Alternativa> alternativas) {
+	public Questao(Integer id, String texto, int nivel, Categoria categoria, Set<Alternativa> alternativas) {
 		this(texto, nivel, categoria, alternativas);
 		this.id = id;
 	}
@@ -69,11 +69,11 @@ public class Questao implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public List<Alternativa> getAlternativas() {
+	public Set<Alternativa> getAlternativas() {
 		return alternativas;
 	}
 
-	public void setAlternativas(List<Alternativa> alternativas) {
+	public void setAlternativas(Set<Alternativa> alternativas) {
 		this.alternativas = alternativas;
 	}
 

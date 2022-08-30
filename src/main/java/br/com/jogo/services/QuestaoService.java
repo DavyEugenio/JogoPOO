@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Questao;
+import br.com.jogo.dto.QuestaoDTO;
+import br.com.jogo.dto.QuestaoNewDTO;
 import br.com.jogo.repositories.QuestaoRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -65,8 +68,12 @@ public class QuestaoService {
 	public List<Questao> findAll() {
 		return repository.findAll();
 	}
-	/*
-	 * public Questao fromDTO(QuestaoDTO catDto) { return new
-	 * Questao(catDto.getId(), catDto.getDescricao()); }
-	 */
+
+	public Questao fromDTO(QuestaoDTO objDto) {
+		return new Questao(objDto.getId(), objDto.getTexto(), objDto.getNivel(), null, null);
+	}
+	
+	public Questao fromDTO(QuestaoNewDTO objDto) {
+		return new Questao(objDto.getTexto(), objDto.getNivel(), null, null);
+	}
 }

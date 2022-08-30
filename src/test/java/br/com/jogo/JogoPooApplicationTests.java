@@ -1,7 +1,6 @@
 package br.com.jogo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +13,17 @@ import br.com.jogo.services.QuestaoService;
 
 @SpringBootTest
 class JogoPooApplicationTests {
-	
+
 	@Autowired
 	private QuestaoService qrepo;
-	
+
 	@Test
 	void contextLoads() {
 	}
-	
+
 	@Test
 	void inserirQuestao() {
-		ArrayList<Alternativa> alts = new ArrayList<>();
-		alts.addAll(List.of(new Alternativa("Wagner", false), new Alternativa("Beethoven", true), new Alternativa("Beethoven", false)));
-		Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"), alts);
+		Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"), Set.of(new Alternativa("Wagner", false), new Alternativa("Beethoven", true), new Alternativa("Mozart", false)));
 		qrepo.insert(q);
 	}
 }

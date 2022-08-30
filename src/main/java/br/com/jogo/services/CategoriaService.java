@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Categoria;
+import br.com.jogo.dto.CategoriaDTO;
+import br.com.jogo.dto.CategoriaNewDTO;
 import br.com.jogo.repositories.CategoriaRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -38,9 +41,7 @@ public class CategoriaService {
 	}
 
 	private void updateData(Categoria obj, Categoria aux) {
-		if (obj.getNome() != null) {
-			aux.setNome(obj.getNome());
-		}
+		aux.setNome(obj.getNome());
 	}
 
 	public void delete(Integer id) {
@@ -56,8 +57,13 @@ public class CategoriaService {
 	public List<Categoria> findAll() {
 		return repository.findAll();
 	}
-	/*
-	 * public Categoria fromDTO(CategoriaDTO catDto) { return new
-	 * Categoria(catDto.getId(), catDto.getDescricao()); }
-	 */
+
+	public Categoria fromDTO(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
+	}
+	
+	public Categoria fromDTO(CategoriaNewDTO objDto) {
+		return new Categoria(objDto.getNome());
+	}
+
 }

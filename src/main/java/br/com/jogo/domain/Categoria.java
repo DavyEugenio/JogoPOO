@@ -3,6 +3,7 @@ package br.com.jogo.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,8 +17,12 @@ public class Categoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(unique = true)
 	private String nome;
-	
+
+	public Categoria() {
+	}
+
 	public Categoria(String nome) {
 		this.nome = nome;
 	}
