@@ -25,13 +25,8 @@ public class Jogo {
 	public Questao insertQuestao(QuestaoNewDTO objDto) {
 		Questao obj = questaoService.fromDTO(objDto);
 		obj.setCategoria(categoriaService.find(objDto.getCategoria()));
-		obj.setAlternativas(
-						objDto
-						.getAlternativas()
-						.stream()
-						.map((a) -> alternativaService.fromDTO(a))
-						.collect(Collectors.toSet())
-						);
+		obj.setAlternativas(objDto.getAlternativas().stream().map((a) -> alternativaService.fromDTO(a))
+				.collect(Collectors.toSet()));
 		return questaoService.insert(obj);
 	}
 

@@ -12,16 +12,16 @@ import javax.persistence.Id;
 public class Alternativa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String texto;
 	private boolean correta;
-	
+
 	public Alternativa() {
 	}
-	
+
 	public Alternativa(String texto, boolean correta) {
 		this.texto = texto;
 		this.correta = correta;
@@ -32,8 +32,6 @@ public class Alternativa implements Serializable {
 		this.texto = texto;
 		this.correta = correta;
 	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -61,7 +59,7 @@ public class Alternativa implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, texto);
 	}
 
 	@Override
@@ -73,7 +71,7 @@ public class Alternativa implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Alternativa other = (Alternativa) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(id, other.id) && Objects.equals(texto, other.texto);
 	}
 
 }
