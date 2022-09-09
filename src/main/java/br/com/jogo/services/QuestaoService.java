@@ -72,7 +72,7 @@ public class QuestaoService {
 	public Questao fromDTO(QuestaoDTO objDto) {
 		return new Questao(objDto.getId(), objDto.getTexto(), objDto.getNivel(), null, null);
 	}
-	
+
 	public Questao fromDTO(QuestaoNewDTO objDto) {
 		return new Questao(objDto.getTexto(), objDto.getNivel(), null, null);
 	}

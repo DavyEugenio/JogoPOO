@@ -23,7 +23,9 @@ class JogoPooApplicationTests {
 
 	@Test
 	void inserirQuestao() {
-		Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"), Set.of(new Alternativa("Wagner", false), new Alternativa("Beethoven", true), new Alternativa("Mozart", false)));
+		Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"),
+				Set.of(new Alternativa("Wagner", false), new Alternativa("Beethoven", true),
+						new Alternativa("Mozart", false)));
 		qrepo.insert(q);
 	}
 }

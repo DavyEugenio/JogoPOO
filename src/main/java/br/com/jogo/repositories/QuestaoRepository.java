@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.com.jogo.domain.Questao;
 
 @Repository
-public interface QuestaoRepository extends JpaRepository<Questao, Integer> {	
+public interface QuestaoRepository extends JpaRepository<Questao, Integer> {
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.com.jogo.domain.Admin;
 
 @Repository
-public interface AdminRepository extends JpaRepository<Admin, Integer> {	
+public interface AdminRepository extends JpaRepository<Admin, Integer> {
 }

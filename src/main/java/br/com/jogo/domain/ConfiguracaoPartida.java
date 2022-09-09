@@ -30,14 +30,14 @@ public class ConfiguracaoPartida implements Serializable {
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
 	@ManyToMany
-	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = { @JoinColumn(name = "partida_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "questao_id") })
+	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
+			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private Set<Questao> questoes;
 	@ManyToMany
-	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = { @JoinColumn(name = "partida_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "categoria_id") })
+	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = {
+			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
 	private Set<Categoria> categorias;
-	
+
 	public ConfiguracaoPartida(Set<Categoria> categorias) {
 		this.categorias = categorias;
 	}
@@ -68,6 +68,17 @@ public class ConfiguracaoPartida implements Serializable {
 		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
 	}
 
+	public ConfiguracaoPartida(int nivel, Jogador jogador, Set<Questao> questoes) {
+		this.nivel = nivel;
+		this.jogador = jogador;
+		this.questoes = questoes;
+		this.predefinida = true;
+		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
+	}
+
+	public ConfiguracaoPartida() {
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -83,7 +94,7 @@ public class ConfiguracaoPartida implements Serializable {
 	public void setNivel(int nivel) {
 		this.nivel = nivel;
 	}
-	
+
 	public boolean isPredefinida() {
 		return predefinida;
 	}

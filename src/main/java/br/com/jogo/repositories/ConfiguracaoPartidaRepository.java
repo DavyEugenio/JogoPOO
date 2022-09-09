@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.com.jogo.domain.ConfiguracaoPartida;
 
 @Repository
-public interface ConfiguracaoPartidaRepository extends JpaRepository<ConfiguracaoPartida, Integer> {	
+public interface ConfiguracaoPartidaRepository extends JpaRepository<ConfiguracaoPartida, Integer> {
 }

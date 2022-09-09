@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.com.jogo.domain.Jogador;
 
 @Repository
-public interface JogadorRepository extends JpaRepository<Jogador, Integer> {	
+public interface JogadorRepository extends JpaRepository<Jogador, Integer> {
 }

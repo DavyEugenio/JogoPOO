@@ -32,14 +32,14 @@ public class Questao implements Serializable {
 
 	public Questao() {
 	}
-	
+
 	public Questao(String texto, int nivel, Categoria categoria, Set<Alternativa> alternativas) {
 		this.texto = texto;
 		this.nivel = nivel;
 		this.categoria = categoria;
 		this.alternativas = alternativas;
 	}
-	
+
 	public Questao(Integer id, String texto, int nivel, Categoria categoria, Set<Alternativa> alternativas) {
 		this(texto, nivel, categoria, alternativas);
 		this.id = id;

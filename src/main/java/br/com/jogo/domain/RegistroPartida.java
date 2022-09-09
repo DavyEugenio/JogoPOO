@@ -31,8 +31,8 @@ public class RegistroPartida implements Serializable {
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
 	@ManyToMany
-	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = { @JoinColumn(name = "partida_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "questao_id") })
+	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
+			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private List<Questao> questoes;
 
 	public RegistroPartida() {

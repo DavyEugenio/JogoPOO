@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import br.com.jogo.domain.Alternativa;
 
 @Repository
-public interface AlternativaRepository extends JpaRepository<Alternativa, Integer> {	
+public interface AlternativaRepository extends JpaRepository<Alternativa, Integer> {
 }
