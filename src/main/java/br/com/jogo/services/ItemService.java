@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Item;
+import br.com.jogo.dto.ItemDTO;
 import br.com.jogo.dto.ItemNewDTO;
 import br.com.jogo.repositories.ItemRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
@@ -43,8 +44,7 @@ public class ItemService {
 		/*
 		 * if (obj.getTexto() != null) { aux.setTexto(obj.getTexto()); } if
 		 * (obj.getNivel() != 0) { aux.setNivel(obj.getNivel()); } if
-		 * (obj.getCategoria() != null) { aux.setCategoria(obj.getCategoria()); } if
-		 * (obj.getAlternativas() != null) { aux.setAlternativas(obj.getAlternativas());
+		 * (obj.getCategoria() != null) { aux.setCategoria(obj.getCategoria()); }
 		 * }
 		 */
 	}
@@ -65,6 +65,11 @@ public class ItemService {
 
 	public Item fromDTO(ItemNewDTO objDto) {
 		return new Item(objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
+				objDto.getPenalidade());
+	}
+	
+	public Item fromDTO(ItemDTO objDto) {
+		return new Item(objDto.getId(), objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
 				objDto.getPenalidade());
 	}
 

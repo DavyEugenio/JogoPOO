@@ -10,6 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Jogador;
+import br.com.jogo.dto.JogadorDTO;
+import br.com.jogo.dto.JogadorNewDTO;
 import br.com.jogo.repositories.JogadorRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -67,8 +69,14 @@ public class JogadorService {
 	public List<Jogador> findAll() {
 		return repository.findAll();
 	}
-	/*
-	 * public Jogador fromDTO(JogadorDTO catDto) { return new
-	 * Jogador(catDto.getId(), catDto.getDescricao()); }
-	 */
+
+	public Jogador fromDTO(JogadorDTO objDto) {
+		return new Jogador(objDto.getId(), objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null, 0, 0, 0,
+				objDto.getSaldo(), null, 0, null);
+	}
+
+	public Jogador fromDTO(JogadorNewDTO objDto) {
+		return new Jogador(objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), objDto.getSenha());
+	}
+
 }

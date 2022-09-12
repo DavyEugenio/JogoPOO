@@ -11,8 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.ConfiguracaoPartida;
-import br.com.jogo.domain.Jogador;
-import br.com.jogo.domain.Questao;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
 import br.com.jogo.repositories.ConfiguracaoPartidaRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
@@ -74,12 +72,8 @@ public class ConfiguracaoPartidaService {
 		return repository.findAll();
 	}
 
-	public ConfiguracaoPartida fromDTO(ConfiguracaoPartidaNewDTO objDto, Jogador jogador, Set<Questao> questoes) {
-		/*
-		 * ConfiguracaoPartida cp; if(!objDto.getQuestoes().isEmpty()) {
-		 * cp.setCategorias(objDto.); }
-		 */
-		return new ConfiguracaoPartida(objDto.getNivel(), jogador, questoes);
+	public ConfiguracaoPartida fromDTO(ConfiguracaoPartidaNewDTO objDto) {
+		return new ConfiguracaoPartida(null, objDto.getNivel());
 	}
 
 }

@@ -1,8 +1,6 @@
 package br.com.jogo.resources;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -31,12 +29,13 @@ public class AlternativaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	/*
+	 * @RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody AlternativaNewDTO objNewDto) {
 		Alternativa obj = jogo.insertAlternativa(objNewDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
-	}/*
+	}
 		 * 
 		 * @RequestMapping(value = "/{id}", method = RequestMethod.PUT) public
 		 * ResponseEntity<Void> update(@Valid @RequestBody AlternativaDTO

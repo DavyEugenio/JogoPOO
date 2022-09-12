@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -20,14 +21,17 @@ public class JogadorDTO implements Serializable {
 	@Length(min = 3, max = 20, message = "O tamanho de ser entre 5 e 120 caracters")
 	private String nomeUsuario;
 	@NotEmpty(message = "Preenchimento obrigatório!")
-	@Email(message = "Email inválido")
+	@Email(message = "Email inválido!")
 	private String email;
+	@PositiveOrZero(message = "Valor deve ser 0 ou positivo!")
+	private int saldo;
 
 	public JogadorDTO(Jogador obj) {
 		this.id = obj.getId();
 		this.nome = obj.getNome();
 		this.nomeUsuario = obj.getNomeUsuario();
 		this.email = obj.getEmail();
+		this.getSaldo();
 	}
 
 	public Integer getId() {
@@ -61,5 +65,12 @@ public class JogadorDTO implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
+	public int getSaldo() {
+		return saldo;
+	}
+	
+	public void setSaldo(int saldo) {
+		this.saldo = saldo;
+	}
 }

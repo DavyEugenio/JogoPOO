@@ -31,50 +31,42 @@ public class ConfiguracaoPartida implements Serializable {
 	private Jogador jogador;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
-			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
+			@JoinColumn(name = "configuracao_partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private Set<Questao> questoes;
 	@ManyToMany
-	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = {
-			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
+	@JoinTable(name = "configuracao_partidas_categorias", joinColumns = {
+			@JoinColumn(name = "configuracao_partida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
 	private Set<Categoria> categorias;
 
-	public ConfiguracaoPartida(Set<Categoria> categorias) {
+	public ConfiguracaoPartida(Set<Categoria> categorias, Jogador jogador) {
+		this.categorias = categorias;
+		this.jogador = jogador;
+		
+	}
+
+	public ConfiguracaoPartida(Jogador jogador, int nivel) {
+		this.nivel = nivel;
+		this.jogador = jogador;
+	}
+	
+	public ConfiguracaoPartida(Jogador jogador, Set<Categoria> categorias, int nivel) {
+		this(jogador, nivel);
 		this.categorias = categorias;
 	}
 
-	public ConfiguracaoPartida(Integer id, int nivel) {
-		this.id = id;
-		this.nivel = nivel;
-	}
-
-	public ConfiguracaoPartida(Integer id, int nivel, Jogador jogador) {
-		this.id = id;
-		this.nivel = nivel;
+	public ConfiguracaoPartida(Jogador jogador, Set<Questao> questoes) {
 		this.jogador = jogador;
-	}
-
-	public ConfiguracaoPartida(Integer id, Set<Questao> questoes) {
-		this.id = id;
-		this.questoes = questoes;
-		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
-	}
-
-	public ConfiguracaoPartida(Integer id, int nivel, Jogador jogador, Set<Questao> questoes) {
-		this.id = id;
-		this.nivel = nivel;
-		this.jogador = jogador;
-		this.questoes = questoes;
 		this.predefinida = true;
-		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
-	}
-
-	public ConfiguracaoPartida(int nivel, Jogador jogador, Set<Questao> questoes) {
-		this.nivel = nivel;
-		this.jogador = jogador;
 		this.questoes = questoes;
-		this.predefinida = true;
 		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
+		this.nivel = questoes.stream().map(q -> q.getNivel()).max(Integer::compare).get();
 	}
+	
+	public ConfiguracaoPartida(Integer id, Jogador jogador, Set<Questao> questoes) {
+		this(jogador, questoes);
+		this.id = id;
+	}
+	
 
 	public ConfiguracaoPartida() {
 	}

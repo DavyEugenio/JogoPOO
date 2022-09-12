@@ -50,9 +50,6 @@ public class QuestaoService {
 		if (obj.getCategoria() != null) {
 			aux.setCategoria(obj.getCategoria());
 		}
-		if (obj.getAlternativas() != null) {
-			aux.setAlternativas(obj.getAlternativas());
-		}
 	}
 
 	public void delete(Integer id) {

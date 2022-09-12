@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -60,8 +61,4 @@ public class RegistroPartidaService {
 	public List<RegistroPartida> findAll() {
 		return repository.findAll();
 	}
-	/*
-	 * public RegistroPartida fromDTO(RegistroPartidaDTO catDto) { return new
-	 * RegistroPartida(catDto.getId(), catDto.getDescricao()); }
-	 */
 }

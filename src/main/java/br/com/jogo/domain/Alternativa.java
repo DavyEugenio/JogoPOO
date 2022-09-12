@@ -53,6 +53,11 @@ public class Alternativa implements Serializable {
 		return correta;
 	}
 
+	@Override
+	public String toString() {
+		return "Alternativa [id=" + id + ", texto=" + texto + ", correta=" + correta + "]";
+	}
+
 	public void setCorreta(boolean correta) {
 		this.correta = correta;
 	}
@@ -74,4 +79,5 @@ public class Alternativa implements Serializable {
 		return Objects.equals(id, other.id) && Objects.equals(texto, other.texto);
 	}
 
+	
 }

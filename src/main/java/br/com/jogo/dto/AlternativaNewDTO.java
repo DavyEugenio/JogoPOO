@@ -42,6 +42,6 @@ public class AlternativaNewDTO implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		AlternativaNewDTO other = (AlternativaNewDTO) obj;
-		return correta == other.correta && Objects.equals(texto, other.texto);
+		return correta == Objects.equals(texto, other.texto);
 	}
 }

@@ -2,17 +2,14 @@ package br.com.jogo.services;
 
 import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Alternativa;
 import br.com.jogo.dto.AlternativaNewDTO;
 import br.com.jogo.repositories.AlternativaRepository;
-import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -27,37 +24,26 @@ public class AlternativaService {
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Alternativa.class.getName()));
 	}
 
-	@Transactional
-	public Alternativa insert(Alternativa obj) {
-		obj.setId(null);
-		return repository.save(obj);
-	}
-
-	public Alternativa update(Alternativa obj) {
-		Alternativa newObj = find(obj.getId());
-		updateData(obj, newObj);
-		return repository.save(newObj);
+	public Set<Alternativa> updateAllByList(Set<Alternativa> objs, List<Alternativa> newObjs) {
+		if(objs.size() == 4 && objs.size() == newObjs.size()) {
+			int i = 0;
+			for(Alternativa alt: objs) {
+				updateData(newObjs.get(i), alt);
+				System.out.println(alt);
+				i++;
+				
+			}
+			return Set.copyOf(repository.saveAll(objs));
+		} else {
+			//um erro
+			return null;
+		}
+		
 	}
 
 	private void updateData(Alternativa obj, Alternativa aux) {
-		if (obj.getTexto() != null) {
-			aux.setTexto(obj.getTexto());
-		}
+		aux.setTexto(obj.getTexto());
 		aux.setCorreta(obj.isCorreta());
-	}
-
-	public void delete(Integer id) {
-		find(id);
-		try {
-			repository.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("Não é possivel excluir uma categoria relacionada");
-		} catch (ObjectNotFoundException e) {
-		}
-	}
-
-	public List<Alternativa> findAll() {
-		return repository.findAll();
 	}
 
 	public Alternativa fromDTO(AlternativaNewDTO objNewDto) {

@@ -1,6 +1,7 @@
 package br.com.jogo.dto;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import br.com.jogo.domain.Questao;
 
@@ -10,14 +11,17 @@ public class QuestaoDTO implements Serializable {
 	private Integer id;
 	private String texto;
 	private int nivel;
-	private CategoriaDTO categoria;
+	private Integer categoria;
+	private Set<AlternativaNewDTO> alternativas;
+
+	public QuestaoDTO() {
+	}
 
 	public QuestaoDTO(Questao obj) {
 		super();
 		this.id = obj.getId();
 		this.texto = obj.getTexto();
 		this.nivel = obj.getNivel();
-		this.categoria = new CategoriaDTO(obj.getCategoria());
 	}
 
 	public Integer getId() {
@@ -44,11 +48,19 @@ public class QuestaoDTO implements Serializable {
 		this.nivel = nivel;
 	}
 
-	public CategoriaDTO getCategoria() {
+	public Integer getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(CategoriaDTO categoria) {
+	public void setCategoria(Integer categoria) {
 		this.categoria = categoria;
+	}
+
+	public Set<AlternativaNewDTO> getAlternativas() {
+		return alternativas;
+	}
+
+	public void setAlternativas(Set<AlternativaNewDTO> alternativas) {
+		this.alternativas = alternativas;
 	}
 }

@@ -7,8 +7,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.jogo.domain.Jogador;
-
 public class JogadorNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -21,11 +19,15 @@ public class JogadorNewDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório!")
 	@Email(message = "Email inválido")
 	private String email;
+	@NotEmpty(message = "Preenchimento obrigatório!")
+	@Length(min = 8, message = "O tamanho de ser igual ou superior a 8 caracters")
+	private String senha;
 
-	public JogadorNewDTO(Jogador obj) {
-		this.nome = obj.getNome();
-		this.nomeUsuario = obj.getNomeUsuario();
-		this.email = obj.getEmail();
+	public JogadorNewDTO(String nome, String nomeUsuario, String email, String senha) {
+		this.nome = nome;
+		this.nomeUsuario = nomeUsuario;
+		this.email = email;
+		this.senha = senha;
 	}
 
 	public String getNome() {
@@ -52,4 +54,11 @@ public class JogadorNewDTO implements Serializable {
 		this.email = email;
 	}
 
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 }

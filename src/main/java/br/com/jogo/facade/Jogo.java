@@ -1,6 +1,5 @@
 package br.com.jogo.facade;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,14 +14,18 @@ import br.com.jogo.domain.ConfiguracaoPartida;
 import br.com.jogo.domain.Item;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Questao;
-import br.com.jogo.dto.AlternativaNewDTO;
+import br.com.jogo.domain.RegistroPartida;
+import br.com.jogo.dto.AdminDTO;
+import br.com.jogo.dto.CategoriaDTO;
 import br.com.jogo.dto.CategoriaNewDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
 import br.com.jogo.dto.ItemDTO;
 import br.com.jogo.dto.ItemNewDTO;
+import br.com.jogo.dto.JogadorDTO;
 import br.com.jogo.dto.JogadorNewDTO;
 import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.dto.QuestaoNewDTO;
+import br.com.jogo.dto.RegistroPartidaNewDTO;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.CategoriaService;
@@ -57,7 +60,7 @@ public class Jogo {
 		return adminService.find(id);
 	}
 
-	public Admin insertAdmin(JogadorNewDTO objDto) {
+	public Admin insertAdmin(AdminDTO objDto) {
 		Admin obj = adminService.fromDTO(objDto);
 		return adminService.insert(obj);
 	}
@@ -77,25 +80,8 @@ public class Jogo {
 
 	// --------------------------------Alternativa----------------------------------------------
 
-	public Alternativa insertAlternativa(AlternativaNewDTO objDto) {
-		Alternativa obj = alternativaService.fromDTO(objDto);
-		return alternativaService.insert(obj);
-	}
-
 	public Alternativa findAlternativa(Integer id) {
 		return alternativaService.find(id);
-	}
-
-	public List<Alternativa> findAllAlternativa() {
-		return alternativaService.findAll();
-	}
-
-	public void deleteAlternativa(Integer id) {
-		alternativaService.delete(id);
-	}
-
-	public Alternativa updateAlternativa(AlternativaDTO objDto) {
-		return alternativaService.update(obj);
 	}
 
 	// --------------------------------Categoria----------------------------------------------
@@ -115,22 +101,36 @@ public class Jogo {
 
 	public void deleteCategoria(Integer id) {
 		categoriaService.delete(id);
-	}/*
-		 * 
-		 * public Categoria updateCategoria(CategoriaDTO objDto) { Categoria obj =
-		 * categoriaService.fromDTO(objDto);
-		 * obj.setCategoria(categoriaService.find(objDto.getCategoria().getId()));
-		 * return categoriaService.update(obj); }
-		 */
+	}
+
+	public Categoria updateCategoria(CategoriaDTO objDto) {
+		Categoria obj = categoriaService.fromDTO(objDto);
+		return categoriaService.update(obj);
+	}
 
 	// --------------------------------ConfiguracaoPartida----------------------------------------------
 	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartidaNewDTO objDto) {
+		// Jogador do token
 		Jogador jog = null;
-		Set<Questao> quest = new HashSet<>();
-		quest.addAll(objDto.getQuestoes().stream().map(x -> questaoService.find(x)).toList());
-		ConfiguracaoPartida obj = configuracaoPartidaService.fromDTO(objDto, jog, quest);
+		Set<Questao> quest = objDto.getQuestoes().stream().map(x -> questaoService.find(x)).collect(Collectors.toSet());
+		ConfiguracaoPartida obj = configuracaoPartidaService.fromDTO(objDto);
+		obj.setJogador(jog);
+		obj.setQuestoes(quest);
 		return configuracaoPartidaService.insert(obj);
 	}
+
+	public ConfiguracaoPartida findConfiguracaoPartida(Integer id) {
+		return configuracaoPartidaService.find(id);
+	}
+
+	public List<ConfiguracaoPartida> findAllConfiguracaoPartida() {
+		return configuracaoPartidaService.findAll();
+	}
+
+	public void deleteConfiguracaoPartida(Integer id) {
+		configuracaoPartidaService.delete(id);
+	}
+
 	// --------------------------------Item----------------------------------------------
 
 	public Item findItem(Integer id) {
@@ -203,30 +203,37 @@ public class Jogo {
 
 	public Questao updateQuestao(QuestaoDTO objDto) {
 		Questao obj = questaoService.fromDTO(objDto);
-		obj.setCategoria(categoriaService.find(objDto.getCategoria().getId()));
-		return questaoService.update(obj);
+		obj.setCategoria(categoriaService.find(objDto.getCategoria()));
+		obj = questaoService.update(obj);
+		if (objDto.getAlternativas() != null) {
+			alternativaService.updateAllByList(obj.getAlternativas(),
+					objDto.getAlternativas().stream().map(a -> alternativaService.fromDTO(a)).toList());
+		}
+		return obj;
 	}
 
 	// -------------------------------------RegistroPartida-----------------------------------------
-	
+
 	public RegistroPartida insertRegistroPartida(RegistroPartidaNewDTO objDto) {
-		RegistroPartida obj = registroPartidaServicefromDTO(objDto);
+		RegistroPartida obj;
+		ConfiguracaoPartida cp = findConfiguracaoPartida(objDto.getConfiguracaoPartida());
+		if (cp != null) {
+			obj = new RegistroPartida(cp);
+		} else {
+			obj = new RegistroPartida(new ConfiguracaoPartida());
+		}
+		obj = new RegistroPartida(null);
 		return registroPartidaService.insert(obj);
 	}
-	
+
 	public RegistroPartida findRegistroPartida(Integer id) {
 		return registroPartidaService.find(id);
 	}
-	
-	public RegistroPartida updateRegistroPartida(RegistroPartidaDTO objDto) {
-		RegistroPartida obj = registroPartidaServicefromDTO(objDto);
-		return registroPartidaService.update(obj);
-	}
-	
+
 	public void deleteRegistroPartida(Integer id) {
 		registroPartidaService.delete(id);
 	}
-	
+
 	public List<RegistroPartida> findAllRegistroPartidas() {
 		return registroPartidaService.findAll();
 	}

@@ -30,12 +30,15 @@ public class RegistroPartida implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
+	@ManyToOne()
+	private ConfiguracaoPartida configuracaopartida;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
 			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private List<Questao> questoes;
 
-	public RegistroPartida() {
+	public RegistroPartida(ConfiguracaoPartida configuracaoPartida) {
+		this.configuracaopartida = configuracaoPartida;
 		this.momento = LocalDateTime.now();
 		this.ativa = true;
 		this.pontuacao = 0;
