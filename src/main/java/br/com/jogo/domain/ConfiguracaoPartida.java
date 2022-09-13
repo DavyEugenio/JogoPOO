@@ -1,6 +1,7 @@
 package br.com.jogo.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -34,21 +35,28 @@ public class ConfiguracaoPartida implements Serializable {
 			@JoinColumn(name = "configuracao_partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private Set<Questao> questoes;
 	@ManyToMany
-	@JoinTable(name = "configuracao_partidas_categorias", joinColumns = {
-			@JoinColumn(name = "configuracao_partida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
+	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = {
+			@JoinColumn(name = "configuracaopartida_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "categoria_id") })
 	private Set<Categoria> categorias;
 
-	public ConfiguracaoPartida(Set<Categoria> categorias, Jogador jogador) {
-		this.categorias = categorias;
+	public ConfiguracaoPartida(Jogador jogador) {
 		this.jogador = jogador;
-		
+		this.categorias = new HashSet<>();
+		this.questoes = new HashSet<>();
+	}
+
+	public ConfiguracaoPartida(Set<Categoria> categorias, Jogador jogador) {
+		this(jogador);
+		this.categorias = categorias;
+
 	}
 
 	public ConfiguracaoPartida(Jogador jogador, int nivel) {
+		this(jogador);
 		this.nivel = nivel;
-		this.jogador = jogador;
 	}
-	
+
 	public ConfiguracaoPartida(Jogador jogador, Set<Categoria> categorias, int nivel) {
 		this(jogador, nivel);
 		this.categorias = categorias;
@@ -61,14 +69,10 @@ public class ConfiguracaoPartida implements Serializable {
 		this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
 		this.nivel = questoes.stream().map(q -> q.getNivel()).max(Integer::compare).get();
 	}
-	
+
 	public ConfiguracaoPartida(Integer id, Jogador jogador, Set<Questao> questoes) {
 		this(jogador, questoes);
 		this.id = id;
-	}
-	
-
-	public ConfiguracaoPartida() {
 	}
 
 	public Integer getId() {
@@ -117,6 +121,10 @@ public class ConfiguracaoPartida implements Serializable {
 
 	public void setQuestoes(Set<Questao> questoes) {
 		this.questoes = questoes;
+	}
+	
+	public void addQuestao(Questao questao) {
+		this.questoes.add(questao);
 	}
 
 	public Set<Categoria> getCategorias() {

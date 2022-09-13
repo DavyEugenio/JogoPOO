@@ -64,6 +64,10 @@ public class Jogador extends Usuario {
 	public int getPontuacaoTotal() {
 		return pontuacaoTotal;
 	}
+	
+	public void addPontuacao(int pontos) {
+		this.pontuacaoTotal += pontos;
+	}
 
 	public void setPontuacaoTotal(int pontuacaoTotal) {
 		this.pontuacaoTotal = pontuacaoTotal;

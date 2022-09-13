@@ -2,8 +2,8 @@ package br.com.jogo.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,25 +30,26 @@ public class RegistroPartida implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
-	@ManyToOne()
-	private ConfiguracaoPartida configuracaopartida;
+	@ManyToOne
+	private ConfiguracaoPartida configuracaoPartida;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
 			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
-	private List<Questao> questoes;
+	private Set<Questao> questoesRespondidas;
 
 	public RegistroPartida(ConfiguracaoPartida configuracaoPartida) {
-		this.configuracaopartida = configuracaoPartida;
+		this.configuracaoPartida = configuracaoPartida;
 		this.momento = LocalDateTime.now();
 		this.ativa = true;
 		this.pontuacao = 0;
 	}
 
-	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao) {
+	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao, Set<Questao> questoesRespondidas) {
 		this.id = id;
 		this.momento = momento;
 		this.ativa = ativa;
 		this.pontuacao = pontuacao;
+		this.questoesRespondidas = questoesRespondidas;
 	}
 
 	public Integer getId() {
@@ -83,6 +84,46 @@ public class RegistroPartida implements Serializable {
 		this.pontuacao = pontuacao;
 	}
 
+	public Questao getUltimaQuestao() {
+		return ultimaQuestao;
+	}
+
+	public void addPontuacao(int pontos) {
+		this.pontuacao += pontos;
+	}
+	
+	public void setUltimaQuestao(Questao ultimaQuestao) {
+		this.ultimaQuestao = ultimaQuestao;
+	}
+
+	public Jogador getJogador() {
+		return jogador;
+	}
+
+	public void setJogador(Jogador jogador) {
+		this.jogador = jogador;
+	}
+
+	public ConfiguracaoPartida getConfiguracaoPartida() {
+		return configuracaoPartida;
+	}
+
+	public void setConfiguracaoPartida(ConfiguracaoPartida configuracaopartida) {
+		this.configuracaoPartida = configuracaopartida;
+	}
+
+	public Set<Questao> getQuestoesRepondias() {
+		return questoesRespondidas;
+	}
+
+	public void setQuestoesRespondidas(Set<Questao> questoes) {
+		this.questoesRespondidas = questoes;
+	}
+	
+	public void addQuestoes(Questao questao) {
+		this.questoesRespondidas.add(questao);
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

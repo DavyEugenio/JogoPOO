@@ -39,13 +39,11 @@ public class RegistroPartidaService {
 	}
 
 	private void updateData(RegistroPartida obj, RegistroPartida aux) {
-		/*
-		 * if (obj.isAtiva() != null) { aux.setTexto(obj.getTexto()); } if
-		 * (obj.getNivel() != 0) { aux.setNivel(obj.getNivel()); } if
-		 * (obj.getCategoria() != null) { aux.setCategoria(obj.getCategoria()); } if
-		 * (obj.getAlternativas() != null) { aux.setAlternativas(obj.getAlternativas());
-		 * }
-		 */
+		aux.setAtiva(obj.isAtiva());
+		aux.setConfiguracaoPartida(obj.getConfiguracaoPartida());
+		aux.setPontuacao(obj.getPontuacao());
+		aux.setQuestoesRespondidas(obj.getQuestoesRepondias());
+		aux.setUltimaQuestao(obj.getUltimaQuestao());
 	}
 
 	public void delete(Integer id) {

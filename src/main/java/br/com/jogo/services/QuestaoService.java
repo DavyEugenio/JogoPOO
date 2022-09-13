@@ -2,6 +2,7 @@ package br.com.jogo.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import br.com.jogo.domain.Alternativa;
+import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.dto.QuestaoNewDTO;
@@ -64,6 +67,26 @@ public class QuestaoService {
 
 	public List<Questao> findAll() {
 		return repository.findAll();
+	}
+
+	public Questao findByAlternativa(Alternativa alternativa) {
+		return repository.findByAlternativas(alternativa);
+	}
+
+	public Questao findOneNotIn(Set<Questao> questoes) {
+		return repository.findDistinctFirstByIdNotIn(questoes);
+	}
+
+	public Questao findOneByCategoria(Set<Categoria> categorias, Set<Questao> questoes) {
+		return repository.findDistinctFirstByCategoriaNotInAndIdNotIn(categorias, questoes);
+	}
+
+	public Questao findOneByNivel(int nivel, Set<Questao> questoes) {
+		return repository.findDistinctFirstByNivelAndIdNotIn(nivel, questoes);
+	}
+
+	public Questao findOneByNivelAndCategoria(int nivel, Set<Categoria> categorias, Set<Questao> questoes) {
+		return repository.findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(nivel, categorias, questoes);
 	}
 
 	public Questao fromDTO(QuestaoDTO objDto) {
