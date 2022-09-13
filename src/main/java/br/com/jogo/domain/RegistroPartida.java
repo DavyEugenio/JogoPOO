@@ -44,7 +44,8 @@ public class RegistroPartida implements Serializable {
 		this.pontuacao = 0;
 	}
 
-	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao, Set<Questao> questoesRespondidas) {
+	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao,
+			Set<Questao> questoesRespondidas) {
 		this.id = id;
 		this.momento = momento;
 		this.ativa = ativa;
@@ -91,7 +92,7 @@ public class RegistroPartida implements Serializable {
 	public void addPontuacao(int pontos) {
 		this.pontuacao += pontos;
 	}
-	
+
 	public void setUltimaQuestao(Questao ultimaQuestao) {
 		this.ultimaQuestao = ultimaQuestao;
 	}
@@ -119,11 +120,11 @@ public class RegistroPartida implements Serializable {
 	public void setQuestoesRespondidas(Set<Questao> questoes) {
 		this.questoesRespondidas = questoes;
 	}
-	
+
 	public void addQuestoes(Questao questao) {
 		this.questoesRespondidas.add(questao);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

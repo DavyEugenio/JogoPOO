@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Set;
 
 import br.com.jogo.domain.Questao;
+import br.com.jogo.services.validation.QuestaoUpdate;
 
+@QuestaoUpdate
 public class QuestaoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -30,7 +30,7 @@ public class AlternativaNewDTO implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(correta, texto);
+		return Objects.hash(texto);
 	}
 
 	@Override
@@ -42,6 +42,7 @@ public class AlternativaNewDTO implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		AlternativaNewDTO other = (AlternativaNewDTO) obj;
-		return correta == Objects.equals(texto, other.texto);
+		return Objects.equals(texto, other.texto);
 	}
+
 }

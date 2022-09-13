@@ -36,8 +36,7 @@ public class ConfiguracaoPartida implements Serializable {
 	private Set<Questao> questoes;
 	@ManyToMany
 	@JoinTable(name = "configuracaopartidas_categorias", joinColumns = {
-			@JoinColumn(name = "configuracaopartida_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "categoria_id") })
+			@JoinColumn(name = "configuracaopartida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
 	private Set<Categoria> categorias;
 
 	public ConfiguracaoPartida(Jogador jogador) {
@@ -122,7 +121,7 @@ public class ConfiguracaoPartida implements Serializable {
 	public void setQuestoes(Set<Questao> questoes) {
 		this.questoes = questoes;
 	}
-	
+
 	public void addQuestao(Questao questao) {
 		this.questoes.add(questao);
 	}

@@ -79,5 +79,4 @@ public class Alternativa implements Serializable {
 		return Objects.equals(id, other.id) && Objects.equals(texto, other.texto);
 	}
 
-	
 }

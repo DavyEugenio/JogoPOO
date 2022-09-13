@@ -25,20 +25,20 @@ public class AlternativaService {
 	}
 
 	public Set<Alternativa> updateAllByList(Set<Alternativa> objs, List<Alternativa> newObjs) {
-		if(objs.size() == 4 && objs.size() == newObjs.size()) {
+		if (objs.size() == 4 && objs.size() == newObjs.size()) {
 			int i = 0;
-			for(Alternativa alt: objs) {
+			for (Alternativa alt : objs) {
 				updateData(newObjs.get(i), alt);
 				System.out.println(alt);
 				i++;
-				
+
 			}
 			return Set.copyOf(repository.saveAll(objs));
 		} else {
-			//um erro
+			// um erro
 			return null;
 		}
-		
+
 	}
 
 	private void updateData(Alternativa obj, Alternativa aux) {

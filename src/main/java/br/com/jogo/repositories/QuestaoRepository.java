@@ -14,10 +14,11 @@ public interface QuestaoRepository extends JpaRepository<Questao, Integer> {
 	public Questao findByAlternativas(Alternativa alternativa);
 
 	public Questao findDistinctFirstByIdNotIn(Set<Questao> questoes);
-	
+
 	public Questao findDistinctFirstByCategoriaNotInAndIdNotIn(Set<Categoria> categorias, Set<Questao> questoes);
-	
+
 	public Questao findDistinctFirstByNivelAndIdNotIn(int nivel, Set<Questao> questoes);
-	
-	public Questao findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(int nivel, Set<Categoria> categorias, Set<Questao> questoes);
+
+	public Questao findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(int nivel, Set<Categoria> categorias,
+			Set<Questao> questoes);
 }

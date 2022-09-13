@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.RegistroPartida;
 import br.com.jogo.repositories.RegistroPartidaRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
@@ -58,5 +59,9 @@ public class RegistroPartidaService {
 
 	public List<RegistroPartida> findAll() {
 		return repository.findAll();
+	}
+
+	public List<RegistroPartida> findAtivaByJogador(Jogador obj) {
+		return repository.findByAtivaTrueAndJogador(obj);
 	}
 }

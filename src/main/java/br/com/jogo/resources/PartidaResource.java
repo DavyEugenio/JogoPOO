@@ -52,26 +52,26 @@ public class PartidaResource {
 		List<ConfiguracaoPartidaDTO> list = jogo.findAllConfiguracaoPartidas();
 		return ResponseEntity.ok().body(list);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody RegistroPartidaNewDTO objNewDto) {
 		RegistroPartida obj = jogo.insertRegistroPartida(objNewDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<RegistroPartida> findRegistroPartida(@PathVariable Integer id) {
 		RegistroPartida obj = jogo.findRegistroPartida(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteRegistroPartida(@PathVariable Integer id) {
 		jogo.deleteRegistroPartida(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<RegistroPartidaDTO>> findAllRegistroPartidas() {
 		List<RegistroPartidaDTO> list = jogo.findAllRegistroPartidas();

@@ -44,8 +44,7 @@ public class ItemService {
 		/*
 		 * if (obj.getTexto() != null) { aux.setTexto(obj.getTexto()); } if
 		 * (obj.getNivel() != 0) { aux.setNivel(obj.getNivel()); } if
-		 * (obj.getCategoria() != null) { aux.setCategoria(obj.getCategoria()); }
-		 * }
+		 * (obj.getCategoria() != null) { aux.setCategoria(obj.getCategoria()); } }
 		 */
 	}
 
@@ -67,7 +66,7 @@ public class ItemService {
 		return new Item(objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
 				objDto.getPenalidade());
 	}
-	
+
 	public Item fromDTO(ItemDTO objDto) {
 		return new Item(objDto.getId(), objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
 				objDto.getPenalidade());

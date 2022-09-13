@@ -53,7 +53,7 @@ public class ResourceExceptionHandler {
 				"Erro de validação", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
 	}
-	
+
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<StandardError> httpMessageNotReadableException(HttpMessageNotReadableException e,
 			HttpServletRequest request) {

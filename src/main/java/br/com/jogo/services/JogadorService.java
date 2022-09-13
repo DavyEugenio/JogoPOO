@@ -1,5 +1,6 @@
 package br.com.jogo.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,8 +11,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Jogador;
-import br.com.jogo.dto.JogadorDTO;
-import br.com.jogo.dto.JogadorNewDTO;
+import br.com.jogo.dto.UsuarioDTO;
+import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.repositories.JogadorRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -70,12 +71,24 @@ public class JogadorService {
 		return repository.findAll();
 	}
 
-	public Jogador fromDTO(JogadorDTO objDto) {
-		return new Jogador(objDto.getId(), objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null, 0, 0, 0,
-				objDto.getSaldo(), null, 0, null);
+	public boolean registerAcesso(Jogador obj) {
+		LocalDate today = LocalDate.now();
+		boolean r = true;
+		if (obj.getUltimoAcesso() == today.minusDays(1)) {
+			obj.addQtdAcesso();
+		} else if (obj.getUltimoAcesso() != today) {
+			r = false;
+			obj.setQtdAcessosContinuo(0);
+		}
+		return r;
 	}
 
-	public Jogador fromDTO(JogadorNewDTO objDto) {
+	public Jogador fromDTO(UsuarioDTO objDto) {
+		return new Jogador(objDto.getId(), objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null, 0, 0, 0,
+				0, null, 0, null);
+	}
+
+	public Jogador fromDTO(UsuarioNewDTO objDto) {
 		return new Jogador(objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), objDto.getSenha());
 	}
 

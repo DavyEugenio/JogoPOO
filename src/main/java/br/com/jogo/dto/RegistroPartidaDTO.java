@@ -12,7 +12,7 @@ public class RegistroPartidaDTO implements Serializable {
 	private LocalDateTime momento;
 	private boolean ativa;
 	private int pontuacao;
-	
+
 	public RegistroPartidaDTO(RegistroPartida obj) {
 		this.id = obj.getId();
 		this.momento = obj.getMomento();
@@ -51,6 +51,5 @@ public class RegistroPartidaDTO implements Serializable {
 	public void setPontuacao(int pontuacao) {
 		this.pontuacao = pontuacao;
 	}
-	
-	
+
 }

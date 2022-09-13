@@ -10,8 +10,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Admin;
-import br.com.jogo.dto.AdminDTO;
-import br.com.jogo.dto.AdminNewDTO;
+import br.com.jogo.dto.UsuarioDTO;
+import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.repositories.AdminRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
@@ -65,12 +65,12 @@ public class AdminService {
 	public List<Admin> findAll() {
 		return repository.findAll();
 	}
-	
-	public Admin fromDTO(AdminDTO objDto) {
+
+	public Admin fromDTO(UsuarioDTO objDto) {
 		return new Admin(objDto.getId(), objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null);
 	}
-	
-	public Admin fromDTO(AdminNewDTO objDto) {
+
+	public Admin fromDTO(UsuarioNewDTO objDto) {
 		return new Admin(objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null);
 	}
 

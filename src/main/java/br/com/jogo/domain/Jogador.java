@@ -49,7 +49,7 @@ public class Jogador extends Usuario {
 		qtdAcessosContinuo = 1;
 	}
 
-	void aumentarQtdAcesso() {
+	public void addQtdAcesso() {
 		qtdAcessosContinuo++;
 	}
 
@@ -64,7 +64,7 @@ public class Jogador extends Usuario {
 	public int getPontuacaoTotal() {
 		return pontuacaoTotal;
 	}
-	
+
 	public void addPontuacao(int pontos) {
 		this.pontuacaoTotal += pontos;
 	}

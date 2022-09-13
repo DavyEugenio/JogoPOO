@@ -7,7 +7,10 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-public class JogadorNewDTO implements Serializable {
+import br.com.jogo.services.validation.UsuarioInsert;
+
+@UsuarioInsert
+public class UsuarioNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@NotEmpty(message = "Preenchimento obrigatório!")
@@ -23,7 +26,7 @@ public class JogadorNewDTO implements Serializable {
 	@Length(min = 8, message = "O tamanho de ser igual ou superior a 8 caracters")
 	private String senha;
 
-	public JogadorNewDTO(String nome, String nomeUsuario, String email, String senha) {
+	public UsuarioNewDTO(String nome, String nomeUsuario, String email, String senha) {
 		this.nome = nome;
 		this.nomeUsuario = nomeUsuario;
 		this.email = email;

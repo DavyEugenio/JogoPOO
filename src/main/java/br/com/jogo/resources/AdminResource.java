@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.jogo.domain.Admin;
-import br.com.jogo.dto.AdminDTO;
-import br.com.jogo.dto.AdminNewDTO;
+import br.com.jogo.dto.UsuarioDTO;
+import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.facade.Jogo;
 
 @RestController
@@ -33,14 +33,14 @@ public class AdminResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Integer> insert(@Valid @RequestBody AdminNewDTO objNewDto) {
+	public ResponseEntity<Integer> insert(@Valid @RequestBody UsuarioNewDTO objNewDto) {
 		Admin obj = jogo.insertAdmin(objNewDto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody AdminDTO objDto, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		jogo.updateAdmin(objDto);
 		return ResponseEntity.noContent().build();
 	}
@@ -52,9 +52,9 @@ public class AdminResource {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<AdminDTO>> findAll() {
+	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		List<Admin> list = jogo.findAllAdmins();
-		List<AdminDTO> listDto = list.stream().map(obj -> new AdminDTO(obj)).collect(Collectors.toList());
+		List<UsuarioDTO> listDto = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
 }

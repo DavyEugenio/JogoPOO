@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.jogo.domain.Jogador;
+import br.com.jogo.domain.Usuario;
+import br.com.jogo.services.validation.UsuarioUpdate;
 
-public class JogadorDTO implements Serializable {
+@UsuarioUpdate
+public class UsuarioDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -23,15 +24,15 @@ public class JogadorDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório!")
 	@Email(message = "Email inválido!")
 	private String email;
-	@PositiveOrZero(message = "Valor deve ser 0 ou positivo!")
-	private int saldo;
 
-	public JogadorDTO(Jogador obj) {
+	public UsuarioDTO() {
+	}
+
+	public UsuarioDTO(Usuario obj) {
 		this.id = obj.getId();
 		this.nome = obj.getNome();
 		this.nomeUsuario = obj.getNomeUsuario();
 		this.email = obj.getEmail();
-		this.getSaldo();
 	}
 
 	public Integer getId() {
@@ -64,13 +65,5 @@ public class JogadorDTO implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	public int getSaldo() {
-		return saldo;
-	}
-	
-	public void setSaldo(int saldo) {
-		this.saldo = saldo;
 	}
 }

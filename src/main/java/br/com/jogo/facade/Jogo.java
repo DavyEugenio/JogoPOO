@@ -15,21 +15,19 @@ import br.com.jogo.domain.Item;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.domain.RegistroPartida;
-import br.com.jogo.dto.AdminDTO;
-import br.com.jogo.dto.AdminNewDTO;
 import br.com.jogo.dto.CategoriaDTO;
 import br.com.jogo.dto.CategoriaNewDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
 import br.com.jogo.dto.ItemDTO;
 import br.com.jogo.dto.ItemNewDTO;
-import br.com.jogo.dto.JogadorDTO;
-import br.com.jogo.dto.JogadorNewDTO;
 import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.dto.QuestaoNewDTO;
 import br.com.jogo.dto.RegistroPartidaDTO;
 import br.com.jogo.dto.RegistroPartidaNewDTO;
 import br.com.jogo.dto.RespostaDTO;
+import br.com.jogo.dto.UsuarioDTO;
+import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.CategoriaService;
@@ -64,12 +62,12 @@ public class Jogo {
 		return adminService.find(id);
 	}
 
-	public Admin insertAdmin(AdminNewDTO objDto) {
+	public Admin insertAdmin(UsuarioNewDTO objDto) {
 		Admin obj = adminService.fromDTO(objDto);
 		return adminService.insert(obj);
 	}
 
-	public Admin updateAdmin(AdminDTO objDto) {
+	public Admin updateAdmin(UsuarioDTO objDto) {
 		Admin obj = adminService.fromDTO(objDto);
 		return adminService.update(obj);
 	}
@@ -177,12 +175,12 @@ public class Jogo {
 		return jogadorService.find(id);
 	}
 
-	public Jogador insertJogador(JogadorNewDTO objDto) {
+	public Jogador insertJogador(UsuarioNewDTO objDto) {
 		Jogador obj = jogadorService.fromDTO(objDto);
 		return jogadorService.insert(obj);
 	}
 
-	public Jogador updateJogador(JogadorDTO objDto) {
+	public Jogador updateJogador(UsuarioDTO objDto) {
 		Jogador obj = jogadorService.fromDTO(objDto);
 		return jogadorService.update(obj);
 	}
@@ -319,6 +317,10 @@ public class Jogo {
 			nextQ = questaoService.findOneNotIn(obj.getQuestoes());
 		}
 		return nextQ;
+	}
+
+	public List<RegistroPartida> findPartidaAtivaByJogador(Jogador obj) {
+		return registroPartidaService.findAtivaByJogador(obj);
 	}
 
 }
