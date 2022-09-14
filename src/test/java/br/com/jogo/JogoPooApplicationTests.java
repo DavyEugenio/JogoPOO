@@ -15,7 +15,7 @@ import br.com.jogo.services.QuestaoService;
 class JogoPooApplicationTests {
 
 	@Autowired
-	private QuestaoService qrepo;
+	private QuestaoService qService;
 
 	@Test
 	void contextLoads() {
@@ -23,9 +23,15 @@ class JogoPooApplicationTests {
 
 	@Test
 	void inserirQuestao() {
-		Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"),
+		/*Questao q = new Questao("Autor de Moonlight Sonata", 2, new Categoria("Música"),
 				Set.of(new Alternativa("Wagner", false), new Alternativa("Beethoven", true),
 						new Alternativa("Mozart", false)));
-		qrepo.insert(q);
+		qService.insert(q);*/
 	}
+	
+	@Test
+	void findOne() {
+		System.out.println(qService.findOneNotIn(Set.of(new Questao(1, null, 0, null, null),new Questao(2, null, 0, null, null))));
+	}
+	
 }

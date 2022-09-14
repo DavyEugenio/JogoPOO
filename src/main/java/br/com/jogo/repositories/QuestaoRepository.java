@@ -1,5 +1,6 @@
 package br.com.jogo.repositories;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,14 +12,14 @@ import br.com.jogo.domain.Questao;
 
 @Repository
 public interface QuestaoRepository extends JpaRepository<Questao, Integer> {
-	public Questao findByAlternativas(Alternativa alternativa);
+	public Optional<Questao> findByAlternativas(Alternativa alternativa);
 
-	public Questao findDistinctFirstByIdNotIn(Set<Questao> questoes);
+	public Optional<Questao> findDistinctFirstByIdNotIn(Set<Integer> questoes);
 
-	public Questao findDistinctFirstByCategoriaNotInAndIdNotIn(Set<Categoria> categorias, Set<Questao> questoes);
+	public Optional<Questao> findDistinctFirstByCategoriaNotInAndIdNotIn(Set<Categoria> categorias, Set<Integer> questoes);
 
-	public Questao findDistinctFirstByNivelAndIdNotIn(int nivel, Set<Questao> questoes);
+	public Optional<Questao> findDistinctFirstByNivelAndIdNotIn(int nivel, Set<Integer> questoes);
 
-	public Questao findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(int nivel, Set<Categoria> categorias,
-			Set<Questao> questoes);
+	public Optional<Questao> findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(int nivel, Set<Categoria> categorias,
+			Set<Integer> questoes);
 }

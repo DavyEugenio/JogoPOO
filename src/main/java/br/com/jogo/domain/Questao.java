@@ -102,4 +102,11 @@ public class Questao implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "Questao [id=" + id + ", texto=" + texto + ", nivel=" + nivel + ", alternativas=" + alternativas
+				+ ", categoria=" + categoria + "]";
+	}
+
+	
 }

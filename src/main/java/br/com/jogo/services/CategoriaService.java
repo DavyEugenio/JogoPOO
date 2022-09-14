@@ -57,13 +57,4 @@ public class CategoriaService {
 	public List<Categoria> findAll() {
 		return repository.findAll();
 	}
-
-	public Categoria fromDTO(CategoriaDTO objDto) {
-		return new Categoria(objDto.getId(), objDto.getNome());
-	}
-
-	public Categoria fromDTO(CategoriaNewDTO objDto) {
-		return new Categoria(objDto.getNome());
-	}
-
 }

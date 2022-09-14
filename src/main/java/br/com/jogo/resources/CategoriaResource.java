@@ -34,14 +34,14 @@ public class CategoriaResource {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody CategoriaNewDTO objNewDto) {
-		Categoria obj = jogo.insertCategoria(objNewDto);
+		Categoria obj = jogo.insertCategoria(objNewDto.toEntity());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
-		jogo.updateCategoria(objDto);
+		jogo.updateCategoria(objDto.toEntity());
 		return ResponseEntity.noContent().build();
 	}
 

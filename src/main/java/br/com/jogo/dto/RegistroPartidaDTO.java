@@ -24,32 +24,15 @@ public class RegistroPartidaDTO implements Serializable {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public LocalDateTime getMomento() {
 		return momento;
-	}
-
-	public void setMomento(LocalDateTime momento) {
-		this.momento = momento;
 	}
 
 	public boolean isAtiva() {
 		return ativa;
 	}
 
-	public void setAtiva(boolean ativa) {
-		this.ativa = ativa;
-	}
-
 	public int getPontuacao() {
 		return pontuacao;
 	}
-
-	public void setPontuacao(int pontuacao) {
-		this.pontuacao = pontuacao;
-	}
-
 }

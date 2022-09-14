@@ -3,6 +3,7 @@ package br.com.jogo.services;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -70,30 +71,44 @@ public class QuestaoService {
 	}
 
 	public Questao findByAlternativa(Alternativa alternativa) {
-		return repository.findByAlternativas(alternativa);
+		Optional<Questao> obj = repository.findByAlternativas(alternativa);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado, Id da alternativa: " + alternativa.getId() + ", Tipo: " + Questao.class.getName()));
+	}
+
+	private Set<Integer> SetOfIdsQuestoes(Set<Questao> questoes) {
+		Set<Integer> ids;
+		if (questoes != null && !questoes.isEmpty()) {
+			ids = questoes.stream().map(obj -> obj.getId()).collect(Collectors.toSet());
+		} else {
+			ids = Set.of(0);
+		}
+		return ids;
 	}
 
 	public Questao findOneNotIn(Set<Questao> questoes) {
-		return repository.findDistinctFirstByIdNotIn(questoes);
+		Optional<Questao> obj = repository.findDistinctFirstByIdNotIn(SetOfIdsQuestoes(questoes));
+		return obj.orElseThrow(
+				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
 	public Questao findOneByCategoria(Set<Categoria> categorias, Set<Questao> questoes) {
-		return repository.findDistinctFirstByCategoriaNotInAndIdNotIn(categorias, questoes);
+		Optional<Questao> obj = repository.findDistinctFirstByCategoriaNotInAndIdNotIn(categorias,
+				SetOfIdsQuestoes(questoes));
+		return obj.orElseThrow(
+				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
 	public Questao findOneByNivel(int nivel, Set<Questao> questoes) {
-		return repository.findDistinctFirstByNivelAndIdNotIn(nivel, questoes);
+		Optional<Questao> obj = repository.findDistinctFirstByNivelAndIdNotIn(nivel, SetOfIdsQuestoes(questoes));
+		return obj.orElseThrow(
+				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
 	public Questao findOneByNivelAndCategoria(int nivel, Set<Categoria> categorias, Set<Questao> questoes) {
-		return repository.findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(nivel, categorias, questoes);
-	}
-
-	public Questao fromDTO(QuestaoDTO objDto) {
-		return new Questao(objDto.getId(), objDto.getTexto(), objDto.getNivel(), null, null);
-	}
-
-	public Questao fromDTO(QuestaoNewDTO objDto) {
-		return new Questao(objDto.getTexto(), objDto.getNivel(), null, null);
+		Optional<Questao> obj = repository.findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(nivel,
+				categorias, SetOfIdsQuestoes(questoes));
+		return obj.orElseThrow(
+				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 }

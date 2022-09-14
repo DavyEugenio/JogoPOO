@@ -6,6 +6,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.jogo.domain.Categoria;
 import br.com.jogo.services.validation.CategoriaInsert;
 
 @CategoriaInsert
@@ -23,8 +24,7 @@ public class CategoriaNewDTO implements Serializable {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public Categoria toEntity() {
+		return new Categoria(nome);
 	}
-
 }

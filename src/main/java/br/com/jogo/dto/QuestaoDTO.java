@@ -2,7 +2,9 @@ package br.com.jogo.dto;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.services.validation.QuestaoUpdate;
 
@@ -14,55 +16,41 @@ public class QuestaoDTO implements Serializable {
 	private String texto;
 	private int nivel;
 	private Integer categoria;
-	private Set<AlternativaNewDTO> alternativas;
+	private Set<AlternativaBasicData> alternativas;
 
 	public QuestaoDTO() {
 	}
 
 	public QuestaoDTO(Questao obj) {
-		super();
 		this.id = obj.getId();
 		this.texto = obj.getTexto();
 		this.nivel = obj.getNivel();
+		this.categoria = obj.getCategoria().getId();
+		this.alternativas = obj.getAlternativas().stream().map(AlternativaDTO::new).collect(Collectors.toSet());
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getTexto() {
 		return texto;
-	}
-
-	public void setTexto(String texto) {
-		this.texto = texto;
 	}
 
 	public int getNivel() {
 		return nivel;
 	}
 
-	public void setNivel(int nivel) {
-		this.nivel = nivel;
-	}
-
 	public Integer getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(Integer categoria) {
-		this.categoria = categoria;
-	}
-
-	public Set<AlternativaNewDTO> getAlternativas() {
+	public Set<AlternativaBasicData> getAlternativas() {
 		return alternativas;
 	}
 
-	public void setAlternativas(Set<AlternativaNewDTO> alternativas) {
-		this.alternativas = alternativas;
+	public Questao toEntity() {
+		return new Questao(id, texto, nivel, new Categoria(categoria, null),
+				alternativas.stream().map(a -> ((AlternativaNewDTO) a).toEntity()).collect(Collectors.toSet()));
 	}
 }

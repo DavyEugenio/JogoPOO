@@ -34,14 +34,14 @@ public class AdminResource {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody UsuarioNewDTO objNewDto) {
-		Admin obj = jogo.insertAdmin(objNewDto);
+		Admin obj = jogo.insertAdmin(objNewDto.toAdmin());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
-		jogo.updateAdmin(objDto);
+		jogo.updateAdmin(objDto.toAdmin());
 		return ResponseEntity.noContent().build();
 	}
 

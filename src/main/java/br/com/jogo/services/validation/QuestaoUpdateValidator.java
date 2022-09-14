@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import br.com.jogo.dto.AlternativaBasicData;
 import br.com.jogo.dto.AlternativaNewDTO;
 import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.resources.exception.FieldMessage;
@@ -20,12 +21,13 @@ public class QuestaoUpdateValidator implements ConstraintValidator<QuestaoUpdate
 	@Override
 	public boolean isValid(QuestaoDTO objDto, ConstraintValidatorContext context) {
 		List<FieldMessage> list = new ArrayList<>();
-		Set<AlternativaNewDTO> alternativas = objDto.getAlternativas();
+		Set<AlternativaBasicData> alternativas = objDto.getAlternativas();
 		if (alternativas != null) {
 			if (alternativas.size() != 4) {
 				list.add(new FieldMessage("alternativas", "Quantidade diferente de 4 ou repetições!"));
 			}
-			List<Integer> corretas = alternativas.stream().filter(x -> x.isCorreta()).map(x -> 0).toList();
+			List<Integer> corretas = alternativas.stream().filter(x -> ((AlternativaNewDTO) x).isCorreta()).map(x -> 0)
+					.toList();
 			if (corretas.size() < 1) {
 				list.add(new FieldMessage("alternativas", "Ausência de alternativa correta!"));
 			}

@@ -45,9 +45,4 @@ public class AlternativaService {
 		aux.setTexto(obj.getTexto());
 		aux.setCorreta(obj.isCorreta());
 	}
-
-	public Alternativa fromDTO(AlternativaNewDTO objNewDto) {
-		return new Alternativa(objNewDto.getTexto(), objNewDto.isCorreta());
-	}
-
 }

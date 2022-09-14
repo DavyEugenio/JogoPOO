@@ -22,15 +22,7 @@ public class RespostaDTO implements Serializable {
 		return registroPartida;
 	}
 
-	public void setRegistroPartida(Integer registroPartida) {
-		this.registroPartida = registroPartida;
-	}
-
 	public Integer getAlternativa() {
 		return alternativa;
-	}
-
-	public void setAlternativa(Integer alternativa) {
-		this.alternativa = alternativa;
 	}
 }

@@ -2,6 +2,8 @@ package br.com.jogo.dto;
 
 import java.io.Serializable;
 
+import br.com.jogo.domain.Item;
+
 public class ItemNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -12,7 +14,6 @@ public class ItemNewDTO implements Serializable {
 	private int penalidade;
 
 	public ItemNewDTO() {
-
 	}
 
 	public ItemNewDTO(String nome, String funcao, int raridade, int preco, int penalidade) {
@@ -28,40 +29,23 @@ public class ItemNewDTO implements Serializable {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public String getFuncao() {
 		return funcao;
-	}
-
-	public void setFuncao(String funcao) {
-		this.funcao = funcao;
 	}
 
 	public int getPreco() {
 		return preco;
 	}
 
-	public void setPreco(int preco) {
-		this.preco = preco;
-	}
-
 	public int getPenalidade() {
 		return penalidade;
-	}
-
-	public void setPenalidade(int penalidade) {
-		this.penalidade = penalidade;
 	}
 
 	public int getRaridade() {
 		return raridade;
 	}
-
-	public void setRaridade(int raridade) {
-		this.raridade = raridade;
+	
+	public Item toEntity() {
+		return new Item(nome, funcao, raridade, preco, penalidade);
 	}
-
 }

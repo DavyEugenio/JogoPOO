@@ -15,19 +15,6 @@ import br.com.jogo.domain.Item;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.domain.RegistroPartida;
-import br.com.jogo.dto.CategoriaDTO;
-import br.com.jogo.dto.CategoriaNewDTO;
-import br.com.jogo.dto.ConfiguracaoPartidaDTO;
-import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
-import br.com.jogo.dto.ItemDTO;
-import br.com.jogo.dto.ItemNewDTO;
-import br.com.jogo.dto.QuestaoDTO;
-import br.com.jogo.dto.QuestaoNewDTO;
-import br.com.jogo.dto.RegistroPartidaDTO;
-import br.com.jogo.dto.RegistroPartidaNewDTO;
-import br.com.jogo.dto.RespostaDTO;
-import br.com.jogo.dto.UsuarioDTO;
-import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.CategoriaService;
@@ -62,13 +49,11 @@ public class Jogo {
 		return adminService.find(id);
 	}
 
-	public Admin insertAdmin(UsuarioNewDTO objDto) {
-		Admin obj = adminService.fromDTO(objDto);
+	public Admin insertAdmin(Admin obj) {
 		return adminService.insert(obj);
 	}
 
-	public Admin updateAdmin(UsuarioDTO objDto) {
-		Admin obj = adminService.fromDTO(objDto);
+	public Admin updateAdmin(Admin obj) {
 		return adminService.update(obj);
 	}
 
@@ -88,8 +73,7 @@ public class Jogo {
 
 	// --------------------------------Categoria----------------------------------------------
 
-	public Categoria insertCategoria(CategoriaNewDTO objDto) {
-		Categoria obj = categoriaService.fromDTO(objDto);
+	public Categoria insertCategoria(Categoria obj) {
 		return categoriaService.insert(obj);
 	}
 
@@ -105,26 +89,25 @@ public class Jogo {
 		categoriaService.delete(id);
 	}
 
-	public Categoria updateCategoria(CategoriaDTO objDto) {
-		Categoria obj = categoriaService.fromDTO(objDto);
+	public Categoria updateCategoria(Categoria obj) {
 		return categoriaService.update(obj);
 	}
 
 	// --------------------------------ConfiguracaoPartida----------------------------------------------
-	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartidaNewDTO objDto) {
+	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartida obj) {
 		// Jogador do token
 		Jogador jog = null;
-		ConfiguracaoPartida obj;
-		if (objDto.getQuestoes() != null) {
+		obj.setJogador(jog);
+		if (obj.getQuestoes() != null) {
 			obj = new ConfiguracaoPartida(jog,
-					objDto.getQuestoes().stream().map(x -> questaoService.find(x)).collect(Collectors.toSet()));
+					obj.getQuestoes().stream().map(x -> questaoService.find(x.getId())).collect(Collectors.toSet()));
 		} else {
-			obj = new ConfiguracaoPartida(jog, objDto.getNivel());
-			if (objDto.getCategorias() != null) {
-				obj.setCategorias(
-						objDto.getCategorias().stream().map(x -> categoriaService.find(x)).collect(Collectors.toSet()));
+			obj = new ConfiguracaoPartida(jog, obj.getNivel());
+			if (obj.getCategorias() != null) {
+				obj.setCategorias(obj.getCategorias().stream().map(x -> categoriaService.find(x.getId()))
+						.collect(Collectors.toSet()));
 			}
-			obj.addQuestao(nextQuestionConfiguracaoPartida(obj));
+			obj.setQuestoes(Set.of(nextQuestionConfiguracaoPartida(obj)));
 		}
 		return configuracaoPartidaService.insert(obj);
 	}
@@ -133,12 +116,8 @@ public class Jogo {
 		return configuracaoPartidaService.find(id);
 	}
 
-	public List<ConfiguracaoPartidaDTO> findAllConfiguracaoPartidas() {
-		return configuracaoPartidaService.findAll().stream()
-				.map(obj -> new ConfiguracaoPartidaDTO(obj.getId(), obj.getNivel(),
-						obj.getQuestoes().stream().map(q -> new QuestaoDTO(q)).collect(Collectors.toSet()),
-						obj.getCategorias().stream().map(c -> new CategoriaDTO(c)).collect(Collectors.toSet())))
-				.toList();
+	public List<ConfiguracaoPartida> findAllConfiguracaoPartidas() {
+		return configuracaoPartidaService.findAll();
 	}
 
 	public void deleteConfiguracaoPartida(Integer id) {
@@ -151,13 +130,11 @@ public class Jogo {
 		return itemService.find(id);
 	}
 
-	public Item insertItem(ItemNewDTO objDto) {
-		Item obj = itemService.fromDTO(objDto);
+	public Item insertItem(Item obj) {
 		return itemService.insert(obj);
 	}
 
-	public Item updateItem(ItemDTO objDto) {
-		Item obj = itemService.fromDTO(objDto);
+	public Item updateItem(Item obj) {
 		return itemService.update(obj);
 	}
 
@@ -175,13 +152,11 @@ public class Jogo {
 		return jogadorService.find(id);
 	}
 
-	public Jogador insertJogador(UsuarioNewDTO objDto) {
-		Jogador obj = jogadorService.fromDTO(objDto);
+	public Jogador insertJogador(Jogador obj) {
 		return jogadorService.insert(obj);
 	}
 
-	public Jogador updateJogador(UsuarioDTO objDto) {
-		Jogador obj = jogadorService.fromDTO(objDto);
+	public Jogador updateJogador(Jogador obj) {
 		return jogadorService.update(obj);
 	}
 
@@ -195,11 +170,8 @@ public class Jogo {
 
 	// --------------------------------Questao----------------------------------------------
 
-	public Questao insertQuestao(QuestaoNewDTO objDto) {
-		Questao obj = questaoService.fromDTO(objDto);
-		obj.setCategoria(categoriaService.find(objDto.getCategoria()));
-		obj.setAlternativas(objDto.getAlternativas().stream().map((a) -> alternativaService.fromDTO(a))
-				.collect(Collectors.toSet()));
+	public Questao insertQuestao(Questao obj) {
+		obj.setCategoria(categoriaService.find(obj.getCategoria().getId()));
 		return questaoService.insert(obj);
 	}
 
@@ -215,30 +187,33 @@ public class Jogo {
 		questaoService.delete(id);
 	}
 
-	public Questao updateQuestao(QuestaoDTO objDto) {
-		Questao obj = questaoService.fromDTO(objDto);
-		obj.setCategoria(categoriaService.find(objDto.getCategoria()));
-		obj = questaoService.update(obj);
-		if (objDto.getAlternativas() != null) {
-			alternativaService.updateAllByList(obj.getAlternativas(),
-					objDto.getAlternativas().stream().map(a -> alternativaService.fromDTO(a)).toList());
+	public Questao updateQuestao(Questao obj) {
+		obj.setCategoria(categoriaService.find(obj.getCategoria().getId()));
+		List<Alternativa> alts = obj.getAlternativas().stream().toList();
+		if (alts != null) {
+			obj.setAlternativas(alternativaService.updateAllByList(obj.getAlternativas(), alts));
 		}
-		return obj;
+		return questaoService.update(obj);
 	}
 
 	// -------------------------------------RegistroPartida-----------------------------------------
 
-	public RegistroPartida insertRegistroPartida(RegistroPartidaNewDTO objDto) {
-		RegistroPartida obj;
-		if (objDto.getConfiguracaoPartida() != null) {
-			ConfiguracaoPartida cp = findConfiguracaoPartida(objDto.getConfiguracaoPartida());
-			obj = new RegistroPartida(cp);
+	public RegistroPartida insertRegistroPartida(RegistroPartida obj) {
+		Questao ultima = null;
+		// Jogador Logado
+		Jogador jog = jogadorService.find(1);
+		if (obj.getConfiguracaoPartida() != null) {
+			ConfiguracaoPartida cp = findConfiguracaoPartida(obj.getConfiguracaoPartida().getId());
+			ultima = cp.getQuestoes().stream().findAny().get();
+			obj = new RegistroPartida(cp, jog);
+			
 		} else {
-			// Jogador Logado
-			Jogador jog = new Jogador();
 			ConfiguracaoPartida cp = new ConfiguracaoPartida(jog);
-			obj = new RegistroPartida(cp);
+			ultima = nextQuestionConfiguracaoPartida(cp);
+			cp.setQuestoes(Set.of(ultima));
+			obj = new RegistroPartida(cp, jog);
 		}
+		obj.setUltimaQuestao(ultima);
 		return registroPartidaService.insert(obj);
 	}
 
@@ -250,23 +225,24 @@ public class Jogo {
 		registroPartidaService.delete(id);
 	}
 
-	public List<RegistroPartidaDTO> findAllRegistroPartidas() {
-		return registroPartidaService.findAll().stream().map(obj -> new RegistroPartidaDTO(obj)).toList();
+	public List<RegistroPartida> findAllRegistroPartidas() {
+		return registroPartidaService.findAll();
 	}
 
 	// -----------------------------Regras Jogo-----------------------------
 
-	public RegistroPartida answerQuestion(RespostaDTO objDto) {
-		RegistroPartida rp = findRegistroPartida(objDto.getRegistroPartida());
+	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) {
+		RegistroPartida rp = findRegistroPartida(registroPartida.getId());
+		if (!rp.isAtiva()) {
+			// Excecao: partida inativo
+		}
 		ConfiguracaoPartida cp = rp.getConfiguracaoPartida();
-		Alternativa a = findAlternativa(objDto.getAlternativa());
+		Alternativa a = findAlternativa(alternativa.getId());
 		Questao q = questaoService.findByAlternativa(a);
 		if (!rp.getUltimaQuestao().equals(q)) {
 			// Excecao: alternativa não pertence a uma questoa da configuracao
 		}
-		if (!rp.isAtiva()) {
-			// Excecao: partida inativo
-		}
+		
 		if (a.isCorreta()) {
 			rp.addPontuacao(q.getNivel());
 			rp.getJogador().addPontuacao(q.getNivel());
@@ -300,6 +276,8 @@ public class Jogo {
 			sq.removeAll(obj.getQuestoesRepondias());
 			if (!sq.isEmpty()) {
 				nextQ = sq.stream().findAny().get();
+			} else {
+				//Excecao: Não questoes disponiveis
 			}
 		}
 		return nextQ;

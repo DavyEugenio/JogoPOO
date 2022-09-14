@@ -1,48 +1,20 @@
 package br.com.jogo.dto;
 
-import java.io.Serializable;
-import java.util.Objects;
+import br.com.jogo.domain.Alternativa;
 
-public class AlternativaNewDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-	private String texto;
+public class AlternativaNewDTO extends AlternativaBasicData {
 	private boolean correta;
 
-	public AlternativaNewDTO() {
-	}
-
-	public String getTexto() {
-		return texto;
-	}
-
-	public void setTexto(String texto) {
-		this.texto = texto;
+	protected AlternativaNewDTO(String texto, boolean correta) {
+		super(texto);
+		this.correta = correta;
 	}
 
 	public boolean isCorreta() {
 		return correta;
 	}
 
-	public void setCorreta(boolean correta) {
-		this.correta = correta;
+	public Alternativa toEntity() {
+		return new Alternativa(getTexto(), correta);
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(texto);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AlternativaNewDTO other = (AlternativaNewDTO) obj;
-		return Objects.equals(texto, other.texto);
-	}
-
 }

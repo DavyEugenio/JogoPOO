@@ -34,14 +34,14 @@ public class JogadorResource {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody UsuarioNewDTO objNewDto) {
-		Jogador obj = jogo.insertJogador(objNewDto);
+		Jogador obj = jogo.insertJogador(objNewDto.toJogador());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
-		jogo.updateJogador(objDto);
+		jogo.updateJogador(objDto.toJogador());
 		return ResponseEntity.noContent().build();
 	}
 

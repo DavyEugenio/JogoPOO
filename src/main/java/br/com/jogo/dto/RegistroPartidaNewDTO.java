@@ -2,6 +2,9 @@ package br.com.jogo.dto;
 
 import java.io.Serializable;
 
+import br.com.jogo.domain.ConfiguracaoPartida;
+import br.com.jogo.domain.RegistroPartida;
+
 public class RegistroPartidaNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -13,9 +16,11 @@ public class RegistroPartidaNewDTO implements Serializable {
 	public Integer getConfiguracaoPartida() {
 		return configuracaoPartida;
 	}
-
-	public void setConfiguracaoPartida(Integer configuracaopartida) {
-		this.configuracaoPartida = configuracaopartida;
+	
+	public RegistroPartida toEntity() {
+		if (configuracaoPartida != null) {
+			return new RegistroPartida(new ConfiguracaoPartida(configuracaoPartida, null, null), null);
+		}
+		return new RegistroPartida();
 	}
-
 }

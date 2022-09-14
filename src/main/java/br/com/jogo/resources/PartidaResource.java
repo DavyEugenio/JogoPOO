@@ -36,7 +36,7 @@ public class PartidaResource {
 
 	@RequestMapping(value = "/configuracoes", method = RequestMethod.POST)
 	public ResponseEntity<Integer> insertConfiguracaoPartida(@Valid @RequestBody ConfiguracaoPartidaNewDTO objNewDto) {
-		ConfiguracaoPartida obj = jogo.insertConfiguracaoPartida(objNewDto);
+		ConfiguracaoPartida obj = jogo.insertConfiguracaoPartida(objNewDto.toEntity());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
@@ -49,13 +49,13 @@ public class PartidaResource {
 
 	@RequestMapping(value = "/configuracoes", method = RequestMethod.GET)
 	public ResponseEntity<List<ConfiguracaoPartidaDTO>> findAllConfiguracaoPartidas() {
-		List<ConfiguracaoPartidaDTO> list = jogo.findAllConfiguracaoPartidas();
+		List<ConfiguracaoPartidaDTO> list = jogo.findAllConfiguracaoPartidas().stream().map(ConfiguracaoPartidaDTO::new).toList();
 		return ResponseEntity.ok().body(list);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Integer> insert(@Valid @RequestBody RegistroPartidaNewDTO objNewDto) {
-		RegistroPartida obj = jogo.insertRegistroPartida(objNewDto);
+	public ResponseEntity<Integer> insert(@RequestBody RegistroPartidaNewDTO objNewDto) {
+		RegistroPartida obj = jogo.insertRegistroPartida(objNewDto.toEntity());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
@@ -74,7 +74,7 @@ public class PartidaResource {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<RegistroPartidaDTO>> findAllRegistroPartidas() {
-		List<RegistroPartidaDTO> list = jogo.findAllRegistroPartidas();
+		List<RegistroPartidaDTO> list = jogo.findAllRegistroPartidas().stream().map(RegistroPartidaDTO::new).toList();
 		return ResponseEntity.ok().body(list);
 	}
 }

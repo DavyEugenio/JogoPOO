@@ -2,12 +2,15 @@ package br.com.jogo.dto;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import br.com.jogo.domain.Categoria;
+import br.com.jogo.domain.Questao;
 import br.com.jogo.services.validation.QuestaoInsert;
 
 @QuestaoInsert
@@ -33,32 +36,20 @@ public class QuestaoNewDTO implements Serializable {
 		return texto;
 	}
 
-	public void setTexto(String texto) {
-		this.texto = texto;
-	}
-
 	public int getNivel() {
 		return nivel;
-	}
-
-	public void setNivel(int nivel) {
-		this.nivel = nivel;
 	}
 
 	public Integer getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(Integer categoria) {
-		this.categoria = categoria;
-	}
-
 	public Set<AlternativaNewDTO> getAlternativas() {
 		return alternativas;
 	}
 
-	public void setAlternativas(Set<AlternativaNewDTO> alternativas) {
-		this.alternativas = alternativas;
+	public Questao toEntity() {
+		return new Questao(texto, nivel, new Categoria(categoria, null),
+				alternativas.stream().map(a -> a.toEntity()).collect(Collectors.toSet()));
 	}
-
 }

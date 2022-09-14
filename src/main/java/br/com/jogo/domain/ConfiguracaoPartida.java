@@ -1,10 +1,10 @@
 package br.com.jogo.domain;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,13 +24,12 @@ public class ConfiguracaoPartida implements Serializable {
 	private Integer id;
 	private int nivel;
 	private boolean predefinida;
-	@OneToMany
-	@JoinColumn(name = "configuracaopartida_id")
+	@OneToMany(mappedBy = "configuracaoPartida")
 	private Set<RegistroPartida> registroPartidas;
 	@ManyToOne
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
 			@JoinColumn(name = "configuracao_partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private Set<Questao> questoes;
@@ -39,10 +38,11 @@ public class ConfiguracaoPartida implements Serializable {
 			@JoinColumn(name = "configuracaopartida_id") }, inverseJoinColumns = { @JoinColumn(name = "categoria_id") })
 	private Set<Categoria> categorias;
 
+	public ConfiguracaoPartida() {
+	}
+
 	public ConfiguracaoPartida(Jogador jogador) {
 		this.jogador = jogador;
-		this.categorias = new HashSet<>();
-		this.questoes = new HashSet<>();
 	}
 
 	public ConfiguracaoPartida(Set<Categoria> categorias, Jogador jogador) {

@@ -31,7 +31,7 @@ public class AlternativaResource {
 	 * }
 	 * 
 	 * @RequestMapping(value = "/{id}", method = RequestMethod.PUT) public
-	 * ResponseEntity<Void> update(@Valid @RequestBody AlternativaDTO
+	 * ResponseEntity<Void> update(@Valid @RequestBody AlternativaBasicData
 	 * objDto, @PathVariable Integer id) { jogo.updateAlternativa(objDto); return
 	 * ResponseEntity.noContent().build(); }
 	 * 
@@ -40,9 +40,9 @@ public class AlternativaResource {
 	 * jogo.deleteAlternativa(id); return ResponseEntity.noContent().build(); }
 	 * 
 	 * @RequestMapping(method = RequestMethod.GET) public
-	 * ResponseEntity<List<AlternativaDTO>> findAll() { List<Alternativa> list =
-	 * jogo.findAllQuestoes(); List<AlternativaDTO> listDto = list.stream().map(obj
-	 * -> new AlternativaDTO(obj)).collect(Collectors.toList()); return
+	 * ResponseEntity<List<AlternativaBasicData>> findAll() { List<Alternativa> list =
+	 * jogo.findAllQuestoes(); List<AlternativaBasicData> listDto = list.stream().map(obj
+	 * -> new AlternativaBasicData(obj)).collect(Collectors.toList()); return
 	 * ResponseEntity.ok().body(listDto); }
 	 */
 }

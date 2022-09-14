@@ -7,6 +7,9 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.jogo.domain.Admin;
+import br.com.jogo.domain.Categoria;
+import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Usuario;
 import br.com.jogo.services.validation.UsuarioUpdate;
 
@@ -39,31 +42,24 @@ public class UsuarioDTO implements Serializable {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getNome() {
 		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getNomeUsuario() {
 		return nomeUsuario;
 	}
 
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
-	}
-
 	public String getEmail() {
 		return email;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	
+	public Jogador toJogador() {
+		return new Jogador(id, nome, nomeUsuario, email, null, 0, 0, 0,
+				0, null, 0, null);
+	}
+	
+	public Admin toAdmin() {
+		return new Admin(id, nome, nomeUsuario, email, null);
 	}
 }

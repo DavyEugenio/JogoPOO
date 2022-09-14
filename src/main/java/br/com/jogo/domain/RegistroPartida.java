@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,18 +31,23 @@ public class RegistroPartida implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "jogador_id")
 	private Jogador jogador;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "configuracaopartida_id")
 	private ConfiguracaoPartida configuracaoPartida;
-	@ManyToMany
-	@JoinTable(name = "configuracaopartidas_questoes", joinColumns = {
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "registropartidas_questoes", joinColumns = {
 			@JoinColumn(name = "partida_id") }, inverseJoinColumns = { @JoinColumn(name = "questao_id") })
 	private Set<Questao> questoesRespondidas;
 
-	public RegistroPartida(ConfiguracaoPartida configuracaoPartida) {
+	public RegistroPartida() {
+	}
+
+	public RegistroPartida(ConfiguracaoPartida configuracaoPartida, Jogador jogador) {
 		this.configuracaoPartida = configuracaoPartida;
 		this.momento = LocalDateTime.now();
 		this.ativa = true;
 		this.pontuacao = 0;
+		this.jogador = jogador;
 	}
 
 	public RegistroPartida(Integer id, LocalDateTime momento, boolean ativa, int pontuacao, Questao ultimaQuestao,

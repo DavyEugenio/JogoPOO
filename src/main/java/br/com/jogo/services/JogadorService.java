@@ -82,14 +82,4 @@ public class JogadorService {
 		}
 		return r;
 	}
-
-	public Jogador fromDTO(UsuarioDTO objDto) {
-		return new Jogador(objDto.getId(), objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), null, 0, 0, 0,
-				0, null, 0, null);
-	}
-
-	public Jogador fromDTO(UsuarioNewDTO objDto) {
-		return new Jogador(objDto.getNome(), objDto.getNomeUsuario(), objDto.getEmail(), objDto.getSenha());
-	}
-
 }

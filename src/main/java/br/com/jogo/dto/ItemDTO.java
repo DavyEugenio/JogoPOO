@@ -27,48 +27,27 @@ public class ItemDTO implements Serializable {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getNome() {
 		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getFuncao() {
 		return funcao;
 	}
 
-	public void setFuncao(String funcao) {
-		this.funcao = funcao;
-	}
-
 	public int getPreco() {
 		return preco;
-	}
-
-	public void setPreco(int preco) {
-		this.preco = preco;
 	}
 
 	public int getPenalidade() {
 		return penalidade;
 	}
 
-	public void setPenalidade(int penalidade) {
-		this.penalidade = penalidade;
-	}
-
 	public int getRaridade() {
 		return raridade;
 	}
 
-	public void setRaridade(int raridade) {
-		this.raridade = raridade;
+	public Item toEntity() {
+		return new Item(id, nome, funcao, raridade, preco, penalidade);
 	}
-
 }
