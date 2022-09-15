@@ -10,8 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Categoria;
-import br.com.jogo.dto.CategoriaDTO;
-import br.com.jogo.dto.CategoriaNewDTO;
 import br.com.jogo.repositories.CategoriaRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;

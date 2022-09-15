@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.jogo.domain.Admin;
-import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Usuario;
 import br.com.jogo.services.validation.UsuarioUpdate;

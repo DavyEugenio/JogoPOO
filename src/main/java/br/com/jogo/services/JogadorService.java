@@ -11,8 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Jogador;
-import br.com.jogo.dto.UsuarioDTO;
-import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.repositories.JogadorRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;

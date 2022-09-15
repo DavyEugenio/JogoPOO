@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import br.com.jogo.domain.Alternativa;
 import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
-import br.com.jogo.dto.QuestaoDTO;
-import br.com.jogo.dto.QuestaoNewDTO;
 import br.com.jogo.repositories.QuestaoRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Alternativa;
-import br.com.jogo.dto.AlternativaNewDTO;
 import br.com.jogo.repositories.AlternativaRepository;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
