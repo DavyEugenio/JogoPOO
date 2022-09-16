@@ -40,6 +40,7 @@ public abstract class Usuario implements Serializable {
 		this.nomeUsuario = nomeUsuario;
 		this.email = email;
 		this.senha = senha;
+		this.role = role;
 	}
 
 	public Usuario(Integer id, String nome, String nomeUsuario, String email, String senha, Integer role) {
