@@ -13,6 +13,8 @@ import javax.persistence.InheritanceType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.jogo.domain.enums.Role;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Usuario implements Serializable {
@@ -28,19 +30,20 @@ public abstract class Usuario implements Serializable {
 	private String email;
 	@JsonIgnore
 	private String senha;
+	private Integer role;
 
 	public Usuario() {
 	}
 
-	public Usuario(String nome, String nomeUsuario, String email, String senha) {
+	public Usuario(String nome, String nomeUsuario, String email, String senha, Integer role) {
 		this.nome = nome;
 		this.nomeUsuario = nomeUsuario;
 		this.email = email;
 		this.senha = senha;
 	}
 
-	public Usuario(Integer id, String nome, String nomeUsuario, String email, String senha) {
-		this(nome, nomeUsuario, email, senha);
+	public Usuario(Integer id, String nome, String nomeUsuario, String email, String senha, Integer role) {
+		this(nome, nomeUsuario, email, senha, role);
 		this.id = id;
 	}
 
@@ -82,6 +85,10 @@ public abstract class Usuario implements Serializable {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public Role getRole() {
+		return Role.toEnum(role);
 	}
 
 	@Override

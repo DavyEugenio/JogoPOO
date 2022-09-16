@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.com.jogo.domain.Admin;
@@ -42,6 +43,8 @@ public class Jogo {
 	private QuestaoService questaoService;
 	@Autowired
 	private RegistroPartidaService registroPartidaService;
+	@Autowired
+	private BCryptPasswordEncoder pe;
 
 	// --------------------------------Admin----------------------------------------------
 
@@ -50,6 +53,7 @@ public class Jogo {
 	}
 
 	public Admin insertAdmin(Admin obj) {
+		obj.setSenha(pe.encode(obj.getSenha()));
 		return adminService.insert(obj);
 	}
 
@@ -153,6 +157,7 @@ public class Jogo {
 	}
 
 	public Jogador insertJogador(Jogador obj) {
+		obj.setSenha(pe.encode(obj.getSenha()));
 		return jogadorService.insert(obj);
 	}
 

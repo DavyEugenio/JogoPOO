@@ -31,17 +31,18 @@ public class Jogador extends Usuario {
 	public Jogador(Integer id, String nome, String nomeUsuario, String email, String senha, int pontuacao,
 			int numeroPartidas, int pontuacaoTotal, int saldo, LocalDate ultimoAcesso, int qtdAcessosContinuo,
 			List<RegistroPartida> partidas) {
-		super(id, nome, nomeUsuario, email, senha);
+		super(id, nome, nomeUsuario, email, senha, 2);
 		this.qtdPartidas = numeroPartidas;
 		this.pontuacaoTotal = pontuacaoTotal;
 		this.saldo = saldo;
 		this.qtdAcessosContinuo = qtdAcessosContinuo;
 		this.ultimoAcesso = ultimoAcesso;
 		this.partidas = partidas;
+		
 	}
 
 	public Jogador(String nome, String nomeUsuario, String email, String senha) {
-		super(nome, nomeUsuario, email, senha);
+		super(nome, nomeUsuario, email, senha, 2);
 		qtdPartidas = 0;
 		pontuacaoTotal = 0;
 		saldo = 0;

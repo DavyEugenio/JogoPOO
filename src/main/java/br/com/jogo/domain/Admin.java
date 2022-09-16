@@ -11,10 +11,10 @@ public class Admin extends Usuario {
 	}
 
 	public Admin(Integer id, String nome, String nomeUsuario, String email, String senha) {
-		super(id, nome, nomeUsuario, email, senha);
+		super(id, nome, nomeUsuario, email, senha, 1);
 	}
 
 	public Admin(String nome, String nomeUsuario, String email, String senha) {
-		super(nome, nomeUsuario, email, senha);
+		super(nome, nomeUsuario, email, senha, 1);
 	}
 }
