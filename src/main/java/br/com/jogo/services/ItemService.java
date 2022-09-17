@@ -28,12 +28,6 @@ public class ItemService {
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Item.class.getName()));
 	}
 
-	@Transactional
-	public Item insert(Item obj) {
-		obj.setId(null);
-		return repository.save(obj);
-	}
-
 	public Item update(Item obj) {
 		Item newObj = find(obj.getId());
 		updateData(obj, newObj);
@@ -60,16 +54,6 @@ public class ItemService {
 
 	public List<Item> findAll() {
 		return repository.findAll();
-	}
-
-	public Item fromDTO(ItemNewDTO objDto) {
-		return new Item(objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
-				objDto.getPenalidade());
-	}
-
-	public Item fromDTO(ItemDTO objDto) {
-		return new Item(objDto.getId(), objDto.getNome(), objDto.getFuncao(), objDto.getRaridade(), objDto.getPreco(),
-				objDto.getPenalidade());
 	}
 
 }

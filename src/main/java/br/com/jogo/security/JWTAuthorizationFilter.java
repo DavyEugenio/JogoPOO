@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import br.com.jogo.services.exceptions.InvalidTokenException;
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
@@ -30,10 +32,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		String header = request.getHeader("Authorization");
-		System.out.println("Autorização");
 		if (header != null && header.startsWith("Bearer ")) {
-			System.out.println(getAuthentication(header.substring(7)));
-			System.out.println(header.substring(7));
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
 			if (auth != null) {
 				SecurityContextHolder.getContext().setAuthentication(auth);
@@ -42,7 +41,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		chain.doFilter(request, response);
 	}
 
-	private UsernamePasswordAuthenticationToken getAuthentication(String token) {
+	private UsernamePasswordAuthenticationToken getAuthentication(String token) throws InvalidTokenException{
 		if (jwtUtil.validToken(token)) {
 			String username = jwtUtil.getSubject(token);
 			UserDetails user = userDetailsService.loadUserByUsername(username);

@@ -16,6 +16,8 @@ import br.com.jogo.domain.Item;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.domain.RegistroPartida;
+import br.com.jogo.domain.enums.Role;
+import br.com.jogo.security.UserSS;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.CategoriaService;
@@ -24,6 +26,8 @@ import br.com.jogo.services.ItemService;
 import br.com.jogo.services.JogadorService;
 import br.com.jogo.services.QuestaoService;
 import br.com.jogo.services.RegistroPartidaService;
+import br.com.jogo.services.UserService;
+import br.com.jogo.services.exceptions.AuthorizationException;
 
 @Component
 public class Jogo {
@@ -49,6 +53,10 @@ public class Jogo {
 	// --------------------------------Admin----------------------------------------------
 
 	public Admin findAdmin(Integer id) {
+		UserSS userss = UserService.authenticated();
+		if (userss == null || !userss.hasRole(Role.ADMIN) && !id.equals(userss.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
 		return adminService.find(id);
 	}
 
@@ -99,8 +107,15 @@ public class Jogo {
 
 	// --------------------------------ConfiguracaoPartida----------------------------------------------
 	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartida obj) {
-		// Jogador do token
-		Jogador jog = null;
+		UserSS userss = UserService.authenticated();
+		if (userss == null) {
+			throw new AuthorizationException("Acesso negado!");
+		} else {
+			if(!userss.hasRole(Role.JOGADOR)) {
+				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+			}
+		}
+		Jogador jog = findJogador(userss.getId());
 		obj.setJogador(jog);
 		if (obj.getQuestoes() != null) {
 			obj = new ConfiguracaoPartida(jog,
@@ -132,10 +147,6 @@ public class Jogo {
 
 	public Item findItem(Integer id) {
 		return itemService.find(id);
-	}
-
-	public Item insertItem(Item obj) {
-		return itemService.insert(obj);
 	}
 
 	public Item updateItem(Item obj) {
@@ -204,9 +215,16 @@ public class Jogo {
 	// -------------------------------------RegistroPartida-----------------------------------------
 
 	public RegistroPartida insertRegistroPartida(RegistroPartida obj) {
+		UserSS userss = UserService.authenticated();
+		if (userss == null) {
+			throw new AuthorizationException("Acesso negado!");
+		} else {
+			if(!userss.hasRole(Role.JOGADOR)) {
+				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+			}
+		}
 		Questao ultima = null;
-		// Jogador Logado
-		Jogador jog = jogadorService.find(1);
+		Jogador jog = jogadorService.find(userss.getId());
 		if (obj.getConfiguracaoPartida() != null) {
 			ConfiguracaoPartida cp = findConfiguracaoPartida(obj.getConfiguracaoPartida().getId());
 			ultima = cp.getQuestoes().stream().findAny().get();
@@ -237,7 +255,18 @@ public class Jogo {
 	// -----------------------------Regras Jogo-----------------------------
 
 	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) {
+		UserSS userss = UserService.authenticated();
+		if (userss == null) {
+			throw new AuthorizationException("Acesso negado!");
+		} else {
+			if(!userss.hasRole(Role.JOGADOR)) {
+				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+			}
+		}
 		RegistroPartida rp = findRegistroPartida(registroPartida.getId());
+		if(rp.getJogador().getId() != userss.getId()) {
+			throw new AuthorizationException("Apenas o jogador da partida pode responder!");
+		}
 		if (!rp.isAtiva()) {
 			// Excecao: partida inativo
 		}

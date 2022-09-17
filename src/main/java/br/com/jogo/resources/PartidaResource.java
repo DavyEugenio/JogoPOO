@@ -20,6 +20,7 @@ import br.com.jogo.dto.ConfiguracaoPartidaDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
 import br.com.jogo.dto.RegistroPartidaDTO;
 import br.com.jogo.dto.RegistroPartidaNewDTO;
+import br.com.jogo.dto.RespostaDTO;
 import br.com.jogo.facade.Jogo;
 
 @RestController
@@ -76,5 +77,11 @@ public class PartidaResource {
 	public ResponseEntity<List<RegistroPartidaDTO>> findAllRegistroPartidas() {
 		List<RegistroPartidaDTO> list = jogo.findAllRegistroPartidas().stream().map(RegistroPartidaDTO::new).toList();
 		return ResponseEntity.ok().body(list);
+	}
+	
+	@RequestMapping(value = "/responder", method = RequestMethod.POST)
+	public ResponseEntity<RegistroPartida> answerQuestion(@RequestBody RespostaDTO objDto) {
+		jogo.answerQuestion(objDto.getRegistroPartida(), objDto.getAlternativa());
+		return ResponseEntity.noContent().build();
 	}
 }
