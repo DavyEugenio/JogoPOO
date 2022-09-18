@@ -2,11 +2,7 @@ package br.com.jogo.services;
 
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import br.com.jogo.repositories.UsuarioRepository;
 
 @Service
 public class AuthService {

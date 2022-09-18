@@ -27,7 +27,11 @@ import br.com.jogo.services.JogadorService;
 import br.com.jogo.services.QuestaoService;
 import br.com.jogo.services.RegistroPartidaService;
 import br.com.jogo.services.UserService;
+import br.com.jogo.services.exceptions.ActivationException;
 import br.com.jogo.services.exceptions.AuthorizationException;
+import br.com.jogo.services.exceptions.IncorrectAlternativeException;
+import br.com.jogo.services.exceptions.InvalidNextQuestionException;
+import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @Component
 public class Jogo {
@@ -254,7 +258,7 @@ public class Jogo {
 
 	// -----------------------------Regras Jogo-----------------------------
 
-	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) {
+	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) throws AuthorizationException,ObjectNotFoundException,ActivationException,IncorrectAlternativeException,InvalidNextQuestionException {
 		UserSS userss = UserService.authenticated();
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
@@ -268,15 +272,14 @@ public class Jogo {
 			throw new AuthorizationException("Apenas o jogador da partida pode responder!");
 		}
 		if (!rp.isAtiva()) {
-			// Excecao: partida inativo
+			throw new ActivationException("A partida está inativa!");
 		}
 		ConfiguracaoPartida cp = rp.getConfiguracaoPartida();
 		Alternativa a = findAlternativa(alternativa.getId());
 		Questao q = questaoService.findByAlternativa(a);
 		if (!rp.getUltimaQuestao().equals(q)) {
-			// Excecao: alternativa não pertence a uma questoa da configuracao
+			throw new ObjectNotFoundException("A alternativa nao pertece a uma questao da partida.");
 		}
-		
 		if (a.isCorreta()) {
 			rp.addPontuacao(q.getNivel());
 			rp.getJogador().addPontuacao(q.getNivel());
@@ -295,7 +298,7 @@ public class Jogo {
 		}
 		rp = registroPartidaService.update(rp);
 		if (!a.isCorreta()) {
-			// Excecao: Resposta Incorreta;
+			throw new IncorrectAlternativeException("Alternativa respondida está incorreta.");
 		}
 		return rp;
 	}
@@ -311,7 +314,7 @@ public class Jogo {
 			if (!sq.isEmpty()) {
 				nextQ = sq.stream().findAny().get();
 			} else {
-				//Excecao: Não questoes disponiveis
+				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");//nao questoes disponiveis na lista. ganha o jogo?
 			}
 		}
 		return nextQ;

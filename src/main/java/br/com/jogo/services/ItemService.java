@@ -3,15 +3,11 @@ package br.com.jogo.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Item;
-import br.com.jogo.dto.ItemDTO;
-import br.com.jogo.dto.ItemNewDTO;
 import br.com.jogo.repositories.ItemRepository;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
