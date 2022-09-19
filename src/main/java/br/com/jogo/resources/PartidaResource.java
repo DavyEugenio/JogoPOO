@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.jogo.domain.ConfiguracaoPartida;
+import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.RegistroPartida;
 import br.com.jogo.dto.ConfiguracaoPartidaDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
+import br.com.jogo.dto.RankingDTO;
 import br.com.jogo.dto.RegistroPartidaDTO;
 import br.com.jogo.dto.RegistroPartidaNewDTO;
 import br.com.jogo.dto.RespostaDTO;
@@ -66,6 +68,14 @@ public class PartidaResource {
 		RegistroPartida obj = jogo.findRegistroPartida(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	@RequestMapping(value = "/jogador/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<RegistroPartidaDTO>> findActiveRegistroPartidaByJogador(@PathVariable Integer id) {
+		Jogador jog = new Jogador();
+		jog.setId(id);
+		List<RegistroPartidaDTO> list = jogo.findActiveByJogador(jog).stream().map(RegistroPartidaDTO::new).toList();
+		return ResponseEntity.ok().body(list);
+	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteRegistroPartida(@PathVariable Integer id) {
@@ -79,9 +89,23 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@RequestMapping(value="/rank", method = RequestMethod.GET)
+	public ResponseEntity<List<RankingDTO>> rankRegistroPartidas() {
+		List<RankingDTO> list = jogo.rankRegistroPartida().stream().map(x -> new RankingDTO(x.getJogador(), x.getPontuacao())).toList();
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@RequestMapping(value="/rank/configuracao/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<RankingDTO>> rankRegistroPartidas(@PathVariable Integer id) {
+		ConfiguracaoPartida cp = new ConfiguracaoPartida();
+		cp.setId(id);
+		List<RankingDTO> list = jogo.rankRegistroPartidaByConfiguracaoPartida(cp).stream().map(x -> new RankingDTO(x.getJogador(), x.getPontuacao())).toList();
+		return ResponseEntity.ok().body(list);
+	}
+	
 	@RequestMapping(value = "/responder", method = RequestMethod.POST)
 	public ResponseEntity<RegistroPartida> answerQuestion(@RequestBody RespostaDTO objDto) {
 		jogo.answerQuestion(objDto.getRegistroPartida(), objDto.getAlternativa());
 		return ResponseEntity.noContent().build();
-	}
+	}	
 }

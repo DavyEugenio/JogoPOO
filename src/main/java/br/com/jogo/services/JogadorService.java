@@ -64,12 +64,17 @@ public class JogadorService {
 		} catch (ObjectNotFoundException e) {
 		}
 	}
+	
 
+	public List<Jogador> rank() {
+		return repository.findAllByOrderByPontuacaoTotalDesc();
+	}
+	
 	public List<Jogador> findAll() {
 		return repository.findAll();
 	}
 
-	public boolean registerAcesso(Jogador obj) {
+	public boolean registerAccess(Jogador obj) {
 		LocalDate today = LocalDate.now();
 		boolean r = true;
 		if (obj.getUltimoAcesso() == today.minusDays(1)) {

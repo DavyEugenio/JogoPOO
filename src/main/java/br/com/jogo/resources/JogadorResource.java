@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.jogo.domain.Jogador;
+import br.com.jogo.dto.RankingDTO;
 import br.com.jogo.dto.UsuarioDTO;
 import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.facade.Jogo;
@@ -55,6 +56,13 @@ public class JogadorResource {
 	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		List<Jogador> list = jogo.findAllJogadores();
 		List<UsuarioDTO> listDto = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@RequestMapping(value = "/ranking", method = RequestMethod.GET)
+	public ResponseEntity<List<RankingDTO>> rank() {
+		List<Jogador> list = jogo.rankJogadores();
+		List<RankingDTO> listDto = list.stream().map(obj -> new RankingDTO(obj, obj.getPontuacaoTotal())).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
 }

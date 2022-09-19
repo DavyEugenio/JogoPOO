@@ -183,9 +183,13 @@ public class Jogo {
 	public void deleteJogador(Integer id) {
 		jogadorService.delete(id);
 	}
-
+	
 	public List<Jogador> findAllJogadores() {
 		return jogadorService.findAll();
+	}
+
+	public List<Jogador> rankJogadores() {
+		return jogadorService.rank();
 	}
 
 	// --------------------------------Questao----------------------------------------------
@@ -255,7 +259,20 @@ public class Jogo {
 	public List<RegistroPartida> findAllRegistroPartidas() {
 		return registroPartidaService.findAll();
 	}
-
+	
+	public List<RegistroPartida> findActiveByJogador(Jogador obj) {
+		obj = findJogador(obj.getId());
+		return registroPartidaService.findActiveByJogador(obj);
+	}
+	
+	public List<RegistroPartida> rankRegistroPartidaByConfiguracaoPartida(ConfiguracaoPartida obj) {
+		obj = configuracaoPartidaService.find(obj.getId());
+		return registroPartidaService.rankByConfiguracaoPartida(obj);
+	}
+	
+	public List<RegistroPartida> rankRegistroPartida(){
+		return registroPartidaService.rank();
+	}
 	// -----------------------------Regras Jogo-----------------------------
 
 	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) throws AuthorizationException,ObjectNotFoundException,ActivationException,IncorrectAlternativeException,InvalidNextQuestionException {
@@ -314,7 +331,7 @@ public class Jogo {
 			if (!sq.isEmpty()) {
 				nextQ = sq.stream().findAny().get();
 			} else {
-				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");//nao questoes disponiveis na lista. ganha o jogo?
+				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");//Sem questoes disponiveis na lista. ganha o jogo?
 			}
 		}
 		return nextQ;
@@ -335,7 +352,7 @@ public class Jogo {
 	}
 
 	public List<RegistroPartida> findPartidaAtivaByJogador(Jogador obj) {
-		return registroPartidaService.findAtivaByJogador(obj);
+		return registroPartidaService.findActiveByJogador(obj);
 	}
 
 }
