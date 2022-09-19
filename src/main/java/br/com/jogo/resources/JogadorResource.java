@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.jogo.domain.Jogador;
@@ -64,5 +66,17 @@ public class JogadorResource {
 		List<Jogador> list = jogo.rankJogadores();
 		List<RankingDTO> listDto = list.stream().map(obj -> new RankingDTO(obj, obj.getPontuacaoTotal())).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@RequestMapping(value = "/picture", method = RequestMethod.POST)
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+		URI uri = jogo.uploadProfilePictureOfJogador(file);
+		return ResponseEntity.created(uri).build();
+	}
+
+	@RequestMapping(value = "/picture", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteProfilePicture() {
+		jogo.deleteProfilePictureOfJogador();
+		return ResponseEntity.noContent().build();
 	}
 }

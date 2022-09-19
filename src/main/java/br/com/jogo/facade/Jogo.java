@@ -1,5 +1,7 @@
 package br.com.jogo.facade;
 
+import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.jogo.domain.Admin;
 import br.com.jogo.domain.Alternativa;
@@ -53,6 +56,8 @@ public class Jogo {
 	private RegistroPartidaService registroPartidaService;
 	@Autowired
 	private BCryptPasswordEncoder pe;
+	@Autowired
+	private br.com.jogo.services.ImageService imageService;
 
 	// --------------------------------Admin----------------------------------------------
 
@@ -190,6 +195,26 @@ public class Jogo {
 
 	public List<Jogador> rankJogadores() {
 		return jogadorService.rank();
+	}
+	
+	public URI uploadProfilePictureOfJogador(MultipartFile multipartFile) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Role.JOGADOR)) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		BufferedImage jpgImg = imageService.getJpgImageFromFile(multipartFile);
+		jpgImg = imageService.cropSquare(jpgImg);
+		jpgImg = imageService.resize(jpgImg);
+		String fileName = "jog" + user.getId() + ".jpg";
+		return imageService.uploadImage(imageService.getInputStream(jpgImg, "jpg"), fileName);
+	}
+
+	public void deleteProfilePictureOfJogador() {
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		imageService.deleteImage("jog" + user.getId() + ".jpg");
 	}
 
 	// --------------------------------Questao----------------------------------------------
