@@ -65,7 +65,6 @@ public class JogadorService {
 		}
 	}
 	
-
 	public List<Jogador> rank() {
 		return repository.findAllByOrderByPontuacaoTotalDesc();
 	}
@@ -74,15 +73,14 @@ public class JogadorService {
 		return repository.findAll();
 	}
 
-	public boolean registerAccess(Jogador obj) {
+	public void registerAccess(Integer id) {
 		LocalDate today = LocalDate.now();
-		boolean r = true;
+		Jogador obj = find(id);
 		if (obj.getUltimoAcesso() == today.minusDays(1)) {
 			obj.addQtdAcesso();
 		} else if (obj.getUltimoAcesso() != today) {
-			r = false;
 			obj.setQtdAcessosContinuo(0);
 		}
-		return r;
+		repository.save(obj);
 	}
 }

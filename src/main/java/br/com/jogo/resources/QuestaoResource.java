@@ -41,7 +41,9 @@ public class QuestaoResource {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody QuestaoDTO objDto, @PathVariable Integer id) {
-		jogo.updateQuestao(objDto.toEntity());
+		Questao obj = objDto.toEntity();
+		obj.setId(id);
+		jogo.updateQuestao(obj);
 		return ResponseEntity.noContent().build();
 	}
 

@@ -44,7 +44,9 @@ public class JogadorResource {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
-		jogo.updateJogador(objDto.toJogador());
+		Jogador obj = objDto.toJogador();
+		obj.setId(id);
+		jogo.updateJogador(obj);
 		return ResponseEntity.noContent().build();
 	}
 

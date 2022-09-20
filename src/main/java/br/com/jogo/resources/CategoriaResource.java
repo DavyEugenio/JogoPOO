@@ -42,7 +42,9 @@ public class CategoriaResource {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
-		jogo.updateCategoria(objDto.toEntity());
+		Categoria obj = objDto.toEntity();
+		obj.setId(id);
+		jogo.updateCategoria(obj);
 		return ResponseEntity.noContent().build();
 	}
 

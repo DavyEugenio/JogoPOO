@@ -2,47 +2,55 @@ package br.com.jogo.services;
 
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import br.com.jogo.domain.Usuario;
+import br.com.jogo.security.JWTUtil;
+import br.com.jogo.security.exceptions.InvalidTokenException;
 
 @Service
 public class AuthService {
 
-	/*@Autowired
-	private UsuarioRepository clienteRepository;
 	@Autowired
-	private BCryptPasswordEncoder pe;
-	/*@Autowired
-	private EmailService emailService;
-	*/
-	private Random rand = new Random();
-/*
-	public void sendNewPassword(String email) {
-		Cliente cliente = clienteRepository.findByEmail(email);
-		if (cliente == null) {
-			throw new ObjectNotFoundException("Email não encontrado!");
-		}
-		String newPass = newPassword();
-		cliente.setSenha(pe.encode(newPass));
-		clienteRepository.save(cliente);
-		emailService.sendNewPasswordEmail(cliente, newPass);
-	}*/
+	private JWTUtil jwtUtil;
 
-	private String newPassword() {
-		char[] vet = new char[10];
-		for (int i = 0; i < vet.length; i++) {
+	@Value("${domain.url}")
+	private String domainURL;
+
+	public String generateRecoveryPasswordUrl(Usuario obj, String encodedPassword) {
+		return domainURL + "/pages/criarnovasenha/?rpt="
+				+ jwtUtil.generatePasswordRecoveryToken(obj.getEmail(), obj.getSenha()) + "&email="
+				+ obj.getEmail();
+	}
+
+	public String[] recoverEmailAndPasswordbyToken(String token) {
+		if (jwtUtil.validToken(token)) {
+			return jwtUtil.getSubject(token).split("YN9YxSenhaYN9Yx");
+		} else {
+			throw new InvalidTokenException("Tempo Expirado");
+		}
+	}
+	
+	public String newRandonPassword() {
+		char[] vet = new char[8];
+		for (int i = 0; i < 8; i++) {
 			vet[i] = randomChar();
 		}
 		return new String(vet);
 	}
 
 	private char randomChar() {
-		int opt = rand.nextInt(3);
-		if (opt == 1) {
-			return (char) (rand.nextInt(10) + 48);
-		} else if (opt == 2) {
-			return (char) (rand.nextInt(26) + 65);
+		Random random = new Random();
+		int opt = random.nextInt(3);
+
+		if (opt == 0) {
+			return (char) (random.nextInt(10) + 48);
+		} else if (opt == 1) {
+			return (char) (random.nextInt(26) + 65);
 		} else {
-			return (char) (rand.nextInt(26) + 97);
+			return (char) (random.nextInt(26) + 97);
 		}
 	}
 }

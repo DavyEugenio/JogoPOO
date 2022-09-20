@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,25 +20,34 @@ import br.com.jogo.domain.Item;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.domain.RegistroPartida;
+import br.com.jogo.domain.Usuario;
 import br.com.jogo.domain.enums.Role;
 import br.com.jogo.security.UserSS;
+import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
+import br.com.jogo.services.AuthService;
 import br.com.jogo.services.CategoriaService;
 import br.com.jogo.services.ConfiguracaoPartidaService;
+import br.com.jogo.services.EmailService;
+import br.com.jogo.services.ImageService;
 import br.com.jogo.services.ItemService;
 import br.com.jogo.services.JogadorService;
 import br.com.jogo.services.QuestaoService;
 import br.com.jogo.services.RegistroPartidaService;
 import br.com.jogo.services.UserService;
+import br.com.jogo.services.UsuarioService;
 import br.com.jogo.services.exceptions.ActivationException;
 import br.com.jogo.services.exceptions.AuthorizationException;
 import br.com.jogo.services.exceptions.IncorrectAlternativeException;
 import br.com.jogo.services.exceptions.InvalidNextQuestionException;
+import br.com.jogo.services.exceptions.InvalidRoleUser;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @Component
 public class Jogo {
+	@Autowired
+	private UsuarioService usuarioService;
 	@Autowired
 	private AdminService adminService;
 	@Autowired
@@ -57,7 +67,14 @@ public class Jogo {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	@Autowired
-	private br.com.jogo.services.ImageService imageService;
+	private ImageService imageService;
+	@Autowired
+	private EmailService emailService;
+	@Autowired
+	private AuthService authService;
+	
+	@Value("${domain.url}")
+	private String domainURL;
 
 	// --------------------------------Admin----------------------------------------------
 
@@ -121,7 +138,7 @@ public class Jogo {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
 			if(!userss.hasRole(Role.JOGADOR)) {
-				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
 		Jogador jog = findJogador(userss.getId());
@@ -178,11 +195,19 @@ public class Jogo {
 
 	public Jogador insertJogador(Jogador obj) {
 		obj.setSenha(pe.encode(obj.getSenha()));
+		emailService.sendUserConfirmationHtmlEmail(obj);
 		return jogadorService.insert(obj);
 	}
 
 	public Jogador updateJogador(Jogador obj) {
 		return jogadorService.update(obj);
+	}
+	
+	public void registerJogadorAccess() {
+		UserSS user = UserService.authenticated();
+		if (user != null && user.hasRole(Role.JOGADOR)) {
+			jogadorService.registerAccess(user.getId());
+		}
 	}
 
 	public void deleteJogador(Integer id) {
@@ -253,7 +278,7 @@ public class Jogo {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
 			if(!userss.hasRole(Role.JOGADOR)) {
-				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
 		Questao ultima = null;
@@ -298,6 +323,23 @@ public class Jogo {
 	public List<RegistroPartida> rankRegistroPartida(){
 		return registroPartidaService.rank();
 	}
+	// -----------------------------Autenticação-----------------------------
+	public void sendRecoveryPassword(String email){
+		Usuario obj = usuarioService.findByEmail(email);
+		String password = pe.encode(authService.newRandonPassword());
+		usuarioService.updatePassword(obj, password);
+		emailService.sendPassworRecoveyURLHtmlEmail(obj, authService.generateRecoveryPasswordUrl(obj, password));
+	}
+
+	public void insertNewPassword(String password, String token){
+		String[] usernamePassword = authService.recoverEmailAndPasswordbyToken(token);
+		Usuario obj = usuarioService.findByEmail(usernamePassword[0]);
+		if (!obj.getSenha().equals(usernamePassword[1])) {
+			throw new InvalidTokenException("A senha já foi trocada");
+		}
+	}
+	
+	
 	// -----------------------------Regras Jogo-----------------------------
 
 	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) throws AuthorizationException,ObjectNotFoundException,ActivationException,IncorrectAlternativeException,InvalidNextQuestionException {
@@ -306,7 +348,7 @@ public class Jogo {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
 			if(!userss.hasRole(Role.JOGADOR)) {
-				throw new AuthorizationException("Apenas jogadores podem iniciar uma partida!");//Criar exceção específica
+				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
 		RegistroPartida rp = findRegistroPartida(registroPartida.getId());

@@ -41,7 +41,9 @@ public class AdminResource {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
-		jogo.updateAdmin(objDto.toAdmin());
+		Admin obj = objDto.toAdmin();
+		obj.setId(id);
+		jogo.updateAdmin(obj);
 		return ResponseEntity.noContent().build();
 	}
 

@@ -35,12 +35,12 @@ public class UsuarioUpdateValidator implements ConstraintValidator<UsuarioUpdate
 		Integer uriId = Integer.parseInt(map.get("id"));
 		List<FieldMessage> list = new ArrayList<>();
 
-		Usuario aux = repo.findByEmail(objDto.getEmail());
+		Usuario aux = repo.findByEmail(objDto.getEmail()).get();
 		if (aux != null && aux.getId() != uriId) {
 			list.add(new FieldMessage("email", "Email já existente no sistema!"));
 		}
 
-		aux = repo.findByNomeUsuario(objDto.getNomeUsuario());
+		aux = repo.findByNomeUsuario(objDto.getNomeUsuario()).get();
 		if (aux != null && aux.getId() != uriId) {
 			list.add(new FieldMessage("nomeUsuario", "Nome de usuário já existente no sistema!"));
 		}

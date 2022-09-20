@@ -21,28 +21,4 @@ public class AlternativaResource {
 		Alternativa obj = jogo.findAlternativa(id);
 		return ResponseEntity.ok().body(obj);
 	}
-
-	/*
-	 * @RequestMapping(method = RequestMethod.POST) public ResponseEntity<Integer>
-	 * insert(@Valid @RequestBody AlternativaNewDTO objNewDto) { Alternativa obj =
-	 * jogo.insertAlternativa(objNewDto); URI uri =
-	 * ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand
-	 * (obj.getId()).toUri(); return ResponseEntity.created(uri).body(obj.getId());
-	 * }
-	 * 
-	 * @RequestMapping(value = "/{id}", method = RequestMethod.PUT) public
-	 * ResponseEntity<Void> update(@Valid @RequestBody AlternativaBasicData
-	 * objDto, @PathVariable Integer id) { jogo.updateAlternativa(objDto); return
-	 * ResponseEntity.noContent().build(); }
-	 * 
-	 * @RequestMapping(value = "/{id}", method = RequestMethod.DELETE) public
-	 * ResponseEntity<Void> delete(@PathVariable Integer id) {
-	 * jogo.deleteAlternativa(id); return ResponseEntity.noContent().build(); }
-	 * 
-	 * @RequestMapping(method = RequestMethod.GET) public
-	 * ResponseEntity<List<AlternativaBasicData>> findAll() { List<Alternativa> list =
-	 * jogo.findAllQuestoes(); List<AlternativaBasicData> listDto = list.stream().map(obj
-	 * -> new AlternativaBasicData(obj)).collect(Collectors.toList()); return
-	 * ResponseEntity.ok().body(listDto); }
-	 */
 }

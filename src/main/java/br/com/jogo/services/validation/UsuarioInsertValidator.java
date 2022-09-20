@@ -26,11 +26,11 @@ public class UsuarioInsertValidator implements ConstraintValidator<UsuarioInsert
 	public boolean isValid(UsuarioNewDTO objDto, ConstraintValidatorContext context) {
 		List<FieldMessage> list = new ArrayList<>();
 
-		Usuario aux = repo.findByEmail(objDto.getEmail());
+		Usuario aux = repo.findByEmail(objDto.getEmail()).orElse(null);
 		if (aux != null) {
 			list.add(new FieldMessage("email", "Email já existente no sistema!"));
 		}
-		aux = repo.findByNomeUsuario(objDto.getNomeUsuario());
+		aux = repo.findByNomeUsuario(objDto.getNomeUsuario()).orElse(null);
 		if (aux != null) {
 			list.add(new FieldMessage("nomeUsuario", "Nome de usuário já existente no sistema!"));
 		}
