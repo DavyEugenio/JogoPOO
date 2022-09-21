@@ -1,6 +1,5 @@
 package br.com.jogo.services;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,23 +63,12 @@ public class JogadorService {
 		} catch (ObjectNotFoundException e) {
 		}
 	}
-	
+
 	public List<Jogador> rank() {
 		return repository.findAllByOrderByPontuacaoTotalDesc();
 	}
-	
+
 	public List<Jogador> findAll() {
 		return repository.findAll();
-	}
-
-	public void registerAccess(Integer id) {
-		LocalDate today = LocalDate.now();
-		Jogador obj = find(id);
-		if (obj.getUltimoAcesso() == today.minusDays(1)) {
-			obj.addQtdAcesso();
-		} else if (obj.getUltimoAcesso() != today) {
-			obj.setQtdAcessosContinuo(0);
-		}
-		repository.save(obj);
 	}
 }

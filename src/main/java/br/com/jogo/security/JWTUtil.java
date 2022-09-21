@@ -4,9 +4,11 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import br.com.jogo.services.UsuarioService;
 import br.com.jogo.services.exceptions.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,15 +21,17 @@ public class JWTUtil {
 	private String secret;
 	@Value("${jwt.expiration}")
 	private Long expiration;
+	@Autowired
+	private UsuarioService usuarioService;
 
 	private String generateToken(String subject) {
-
 		SecretKey key = Keys.hmacShaKeyFor(secret.getBytes());
 		return Jwts.builder().setSubject(subject).setExpiration(new Date(System.currentTimeMillis() + expiration))
 				.signWith(key).compact();
 	}
 
 	public String generateAuthToken(String username) {
+		usuarioService.registerAccess(username);
 		return generateToken(username);
 	}
 
@@ -36,8 +40,6 @@ public class JWTUtil {
 	}
 
 	public boolean validToken(String token) {
-		System.out.println("Validação");
-		System.out.println(token);
 		Claims claims = getClaims(token);
 		System.out.println(getClaims(token));
 		if (claims != null) {

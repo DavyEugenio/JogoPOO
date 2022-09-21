@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Questao implements Serializable {
 
@@ -84,6 +86,11 @@ public class Questao implements Serializable {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+	
+	@JsonIgnore
+	public Alternativa getCorrectAlternativa() {
+		return this.alternativas.stream().filter(x->x.isCorreta()).findFirst().get();
+	}
 
 	@Override
 	public int hashCode() {
@@ -100,13 +107,5 @@ public class Questao implements Serializable {
 			return false;
 		Questao other = (Questao) obj;
 		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public String toString() {
-		return "Questao [id=" + id + ", texto=" + texto + ", nivel=" + nivel + ", alternativas=" + alternativas
-				+ ", categoria=" + categoria + "]";
-	}
-
-	
+	}	
 }

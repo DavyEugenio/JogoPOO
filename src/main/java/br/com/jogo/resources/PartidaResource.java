@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.jogo.domain.Alternativa;
 import br.com.jogo.domain.ConfiguracaoPartida;
 import br.com.jogo.domain.Jogador;
 import br.com.jogo.domain.RegistroPartida;
 import br.com.jogo.dto.ConfiguracaoPartidaDTO;
 import br.com.jogo.dto.ConfiguracaoPartidaNewDTO;
+import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.dto.RankingDTO;
 import br.com.jogo.dto.RegistroPartidaDTO;
 import br.com.jogo.dto.RegistroPartidaNewDTO;
@@ -69,6 +71,12 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@RequestMapping(value = "/{id}/questao", method = RequestMethod.GET)
+	public ResponseEntity<QuestaoDTO> sendLastQuestion(@PathVariable Integer id) {
+		QuestaoDTO obj = new QuestaoDTO(jogo.UltimaQuestaoRegistroPartida(id));
+		return ResponseEntity.ok().body(obj);
+	}
+	
 	@RequestMapping(value = "/jogador/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<RegistroPartidaDTO>> findActiveRegistroPartidaByJogador(@PathVariable Integer id) {
 		Jogador jog = new Jogador();
@@ -103,9 +111,10 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	
 	@RequestMapping(value = "/responder", method = RequestMethod.POST)
-	public ResponseEntity<RegistroPartida> answerQuestion(@RequestBody RespostaDTO objDto) {
-		jogo.answerQuestion(objDto.getRegistroPartida(), objDto.getAlternativa());
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<Alternativa> answerQuestion(@RequestBody RespostaDTO objDto) {
+		Alternativa obj = jogo.answerQuestion(objDto.getRegistroPartida(), objDto.getAlternativa());
+		return ResponseEntity.accepted().body(obj);
 	}	
 }

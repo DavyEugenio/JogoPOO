@@ -47,13 +47,19 @@ public class Jogador extends Usuario {
 		pontuacaoTotal = 0;
 		saldo = 0;
 		ultimoAcesso = LocalDate.now();
-		qtdAcessosContinuo = 1;
+		qtdAcessosContinuo = 0;
 	}
 
-	public void addQtdAcesso() {
-		qtdAcessosContinuo++;
+	public void registerAccess() {
+		LocalDate today = LocalDate.now();
+		if (ultimoAcesso.isEqual(today.minusDays(1))) {
+			qtdAcessosContinuo++;
+		} else if (!ultimoAcesso.isEqual(today)) {
+			qtdAcessosContinuo = 0;
+		}
+		ultimoAcesso = today;
 	}
-
+	
 	public int getNumeroPartidas() {
 		return qtdPartidas;
 	}

@@ -20,6 +20,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
 	private UserDetailsService userDetailsService;
+	
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
 			UserDetailsService userDetailsService) {
@@ -36,6 +37,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
 			if (auth != null) {
 				SecurityContextHolder.getContext().setAuthentication(auth);
+				
 			}
 		}
 		chain.doFilter(request, response);

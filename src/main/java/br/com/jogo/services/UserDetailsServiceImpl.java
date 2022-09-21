@@ -14,8 +14,8 @@ import br.com.jogo.security.UserSS;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	UsuarioRepository repo;
-
+	private UsuarioRepository repo;
+	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Usuario user = repo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(email));

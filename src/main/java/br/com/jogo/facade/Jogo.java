@@ -72,7 +72,7 @@ public class Jogo {
 	private EmailService emailService;
 	@Autowired
 	private AuthService authService;
-	
+
 	@Value("${domain.url}")
 	private String domainURL;
 
@@ -137,7 +137,7 @@ public class Jogo {
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
-			if(!userss.hasRole(Role.JOGADOR)) {
+			if (!userss.hasRole(Role.JOGADOR)) {
 				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
@@ -203,17 +203,10 @@ public class Jogo {
 		return jogadorService.update(obj);
 	}
 	
-	public void registerJogadorAccess() {
-		UserSS user = UserService.authenticated();
-		if (user != null && user.hasRole(Role.JOGADOR)) {
-			jogadorService.registerAccess(user.getId());
-		}
-	}
-
 	public void deleteJogador(Integer id) {
 		jogadorService.delete(id);
 	}
-	
+
 	public List<Jogador> findAllJogadores() {
 		return jogadorService.findAll();
 	}
@@ -221,7 +214,7 @@ public class Jogo {
 	public List<Jogador> rankJogadores() {
 		return jogadorService.rank();
 	}
-	
+
 	public URI uploadProfilePictureOfJogador(MultipartFile multipartFile) {
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.hasRole(Role.JOGADOR)) {
@@ -277,7 +270,7 @@ public class Jogo {
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
-			if(!userss.hasRole(Role.JOGADOR)) {
+			if (!userss.hasRole(Role.JOGADOR)) {
 				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
@@ -287,7 +280,7 @@ public class Jogo {
 			ConfiguracaoPartida cp = findConfiguracaoPartida(obj.getConfiguracaoPartida().getId());
 			ultima = cp.getQuestoes().stream().findAny().get();
 			obj = new RegistroPartida(cp, jog);
-			
+
 		} else {
 			ConfiguracaoPartida cp = new ConfiguracaoPartida(jog);
 			ultima = nextQuestionConfiguracaoPartida(cp);
@@ -296,6 +289,14 @@ public class Jogo {
 		}
 		obj.setUltimaQuestao(ultima);
 		return registroPartidaService.insert(obj);
+	}
+
+	public Questao UltimaQuestaoRegistroPartida(Integer id) {
+		RegistroPartida obj = findRegistroPartida(id);
+		if (!obj.isAtiva()) {
+			throw new ActivationException("A partida está inativa!");
+		}
+		return obj.getUltimaQuestao();
 	}
 
 	public RegistroPartida findRegistroPartida(Integer id) {
@@ -309,50 +310,52 @@ public class Jogo {
 	public List<RegistroPartida> findAllRegistroPartidas() {
 		return registroPartidaService.findAll();
 	}
-	
+
 	public List<RegistroPartida> findActiveByJogador(Jogador obj) {
 		obj = findJogador(obj.getId());
 		return registroPartidaService.findActiveByJogador(obj);
 	}
-	
+
 	public List<RegistroPartida> rankRegistroPartidaByConfiguracaoPartida(ConfiguracaoPartida obj) {
 		obj = configuracaoPartidaService.find(obj.getId());
 		return registroPartidaService.rankByConfiguracaoPartida(obj);
 	}
-	
-	public List<RegistroPartida> rankRegistroPartida(){
+
+	public List<RegistroPartida> rankRegistroPartida() {
 		return registroPartidaService.rank();
 	}
+
 	// -----------------------------Autenticação-----------------------------
-	public void sendRecoveryPassword(String email){
+	public void sendRecoveryPassword(String email) {
 		Usuario obj = usuarioService.findByEmail(email);
 		String password = pe.encode(authService.newRandonPassword());
 		usuarioService.updatePassword(obj, password);
 		emailService.sendPassworRecoveyURLHtmlEmail(obj, authService.generateRecoveryPasswordUrl(obj, password));
 	}
 
-	public void insertNewPassword(String password, String token){
+	public void insertNewPassword(String password, String token) {
 		String[] usernamePassword = authService.recoverEmailAndPasswordbyToken(token);
 		Usuario obj = usuarioService.findByEmail(usernamePassword[0]);
 		if (!obj.getSenha().equals(usernamePassword[1])) {
 			throw new InvalidTokenException("A senha já foi trocada");
 		}
 	}
-	
-	
+
 	// -----------------------------Regras Jogo-----------------------------
 
-	public RegistroPartida answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) throws AuthorizationException,ObjectNotFoundException,ActivationException,IncorrectAlternativeException,InvalidNextQuestionException {
+	public Alternativa answerQuestion(RegistroPartida registroPartida, Alternativa alternativa)
+			throws AuthorizationException, ObjectNotFoundException, ActivationException, IncorrectAlternativeException,
+			InvalidNextQuestionException {
 		UserSS userss = UserService.authenticated();
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
 		} else {
-			if(!userss.hasRole(Role.JOGADOR)) {
+			if (!userss.hasRole(Role.JOGADOR)) {
 				throw new InvalidRoleUser("Apenas jogadores podem iniciar uma partida!");
 			}
 		}
 		RegistroPartida rp = findRegistroPartida(registroPartida.getId());
-		if(rp.getJogador().getId() != userss.getId()) {
+		if (rp.getJogador().getId() != userss.getId()) {
 			throw new AuthorizationException("Apenas o jogador da partida pode responder!");
 		}
 		if (!rp.isAtiva()) {
@@ -384,7 +387,7 @@ public class Jogo {
 		if (!a.isCorreta()) {
 			throw new IncorrectAlternativeException("Alternativa respondida está incorreta.");
 		}
-		return rp;
+		return q.getCorrectAlternativa();
 	}
 
 	private Questao nextQuestionRegistroPartida(RegistroPartida obj) {
@@ -398,7 +401,10 @@ public class Jogo {
 			if (!sq.isEmpty()) {
 				nextQ = sq.stream().findAny().get();
 			} else {
-				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");//Sem questoes disponiveis na lista. ganha o jogo?
+				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");// Sem questoes
+																									// disponiveis na
+																									// lista. ganha o
+																									// jogo?
 			}
 		}
 		return nextQ;
