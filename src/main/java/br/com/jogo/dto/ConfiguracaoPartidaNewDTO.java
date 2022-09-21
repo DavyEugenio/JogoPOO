@@ -12,8 +12,8 @@ public class ConfiguracaoPartidaNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int nivel;
-	private Set<Integer> questoes;
-	private Set<Integer> categorias;
+	private Set<Integer> questoesIds;
+	private Set<Integer> categoriasIds;
 
 	public ConfiguracaoPartidaNewDTO() {
 	}
@@ -22,21 +22,21 @@ public class ConfiguracaoPartidaNewDTO implements Serializable {
 		return nivel;
 	}
 
-	public Set<Integer> getQuestoes() {
-		return questoes;
+	public Set<Integer> getQuestoesIds() {
+		return questoesIds;
 	}
 
-	public Set<Integer> getCategorias() {
-		return categorias;
+	public Set<Integer> getCategoriasIds() {
+		return categoriasIds;
 	}
 	
 	public ConfiguracaoPartida toEntity() {
-		if(this.questoes != null) {
-			return new ConfiguracaoPartida(null, this.questoes.stream().map(q -> new Questao(q, null, 0, null, null)).collect(Collectors.toSet()));
+		if(this.questoesIds != null) {
+			return new ConfiguracaoPartida(null, this.questoesIds.stream().map(q -> new Questao(q, null, 0, null, null)).collect(Collectors.toSet()));
 		}
 		Set<Categoria> categorias = null;
-		if(this.categorias != null) {
-			categorias = this.categorias.stream().map(c -> new Categoria(c, null)).collect(Collectors.toSet());
+		if(this.categoriasIds != null) {
+			categorias = this.categoriasIds.stream().map(c -> new Categoria(c, null)).collect(Collectors.toSet());
 		}
 		return new ConfiguracaoPartida(null, categorias, nivel);
 	}

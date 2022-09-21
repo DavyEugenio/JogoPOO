@@ -13,19 +13,19 @@ public class RespostaDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@NotNull(message = "Preenchimento obrigatório")
 	@Min(message = "ID inválido", value = 1)
-	private Integer registroPartida;
+	private Integer registroPartidaId;
 	@NotNull(message = "Preenchimento obrigatório")
 	@Min(message = "ID inválido", value = 1)
-	private Integer alternativa;
+	private Integer alternativaId;
 
 	public RespostaDTO() {
 	}
 
 	public RegistroPartida getRegistroPartida() {
-		return new RegistroPartida(registroPartida, null, false, 0, null, null);
+		return new RegistroPartida(registroPartidaId, null, false, 0, null, null);
 	}
 
 	public Alternativa getAlternativa() {
-		return new Alternativa(alternativa,null,false);
+		return new Alternativa(alternativaId,null,false);
 	}
 }

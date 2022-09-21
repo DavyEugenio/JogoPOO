@@ -8,18 +8,18 @@ import br.com.jogo.domain.RegistroPartida;
 public class RegistroPartidaNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Integer configuracaoPartida;
+	private Integer configuracaoPartidaId;
 
 	public RegistroPartidaNewDTO() {
 	}
 
-	public Integer getConfiguracaoPartida() {
-		return configuracaoPartida;
+	public Integer getConfiguracaoPartidaId() {
+		return configuracaoPartidaId;
 	}
 	
 	public RegistroPartida toEntity() {
-		if (configuracaoPartida != null) {
-			return new RegistroPartida(new ConfiguracaoPartida(configuracaoPartida, null, null), null);
+		if (configuracaoPartidaId != null) {
+			return new RegistroPartida(new ConfiguracaoPartida(configuracaoPartidaId, null, null), null);
 		}
 		return new RegistroPartida();
 	}
