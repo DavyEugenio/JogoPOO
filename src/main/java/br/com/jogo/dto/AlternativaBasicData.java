@@ -2,9 +2,14 @@ package br.com.jogo.dto;
 
 import java.util.Objects;
 
-public abstract class AlternativaBasicData {
-	private String texto;
+import javax.validation.constraints.NotEmpty;
 
+public abstract class AlternativaBasicData {
+	
+	@NotEmpty(message = "preenchimento obrigatorio.")
+	private String texto;
+	
+	@NotEmpty(message = "preenchimento obrigatorio.")
 	public AlternativaBasicData(String texto) {
 		this.texto = texto;
 	}

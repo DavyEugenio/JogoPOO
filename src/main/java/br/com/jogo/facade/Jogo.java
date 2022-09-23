@@ -23,7 +23,6 @@ import br.com.jogo.domain.RegistroPartida;
 import br.com.jogo.domain.Usuario;
 import br.com.jogo.domain.enums.Role;
 import br.com.jogo.security.UserSS;
-import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.AuthService;
@@ -42,6 +41,7 @@ import br.com.jogo.services.exceptions.AuthorizationException;
 import br.com.jogo.services.exceptions.IncorrectAlternativeException;
 import br.com.jogo.services.exceptions.InvalidNextQuestionException;
 import br.com.jogo.services.exceptions.InvalidRoleUser;
+import br.com.jogo.services.exceptions.InvalidTokenException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @Component
@@ -401,10 +401,7 @@ public class Jogo {
 			if (!sq.isEmpty()) {
 				nextQ = sq.stream().findAny().get();
 			} else {
-				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo.");// Sem questoes
-																									// disponiveis na
-																									// lista. ganha o
-																									// jogo?
+				throw new InvalidNextQuestionException("Nao ha questoes disponiveis para o jogo!"); //endgame?
 			}
 		}
 		return nextQ;
