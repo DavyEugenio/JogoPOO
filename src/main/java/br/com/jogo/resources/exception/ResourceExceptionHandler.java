@@ -1,21 +1,19 @@
 package br.com.jogo.resources.exception;
 
-import java.nio.file.AccessDeniedException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.exceptions.AuthorizationException;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.FileException;
-import br.com.jogo.services.exceptions.InvalidTokenException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -51,14 +49,6 @@ public class ResourceExceptionHandler {
 			HttpServletRequest request) {
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
 				"Erro de validação", e.getMessage(), request.getRequestURI());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	}
-
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<StandardError> httpMessageNotReadableException(HttpMessageNotReadableException e,
-			HttpServletRequest request) {
-		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
-				"Erro de conversão em JSON", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
 	}
 

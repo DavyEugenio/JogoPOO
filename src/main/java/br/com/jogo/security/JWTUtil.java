@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.UsuarioService;
-import br.com.jogo.services.exceptions.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-
+import io.jsonwebtoken.security.SignatureException;
 @Component
 public class JWTUtil {
 	@Value("${jwt.secret}")
@@ -39,11 +39,9 @@ public class JWTUtil {
 		return generateToken(username + "YN9YxSenhaYN9Yx" + password);
 	}
 
-	public boolean validToken(String token) {
+	public boolean validToken(String token) throws InvalidTokenException {
 		Claims claims = getClaims(token);
-		System.out.println(getClaims(token));
 		if (claims != null) {
-			System.out.println(getClaims(token).getSubject());
 			String subject = claims.getSubject();
 			Date expirationDate = claims.getExpiration();
 			Date now = new Date(System.currentTimeMillis());
@@ -62,11 +60,13 @@ public class JWTUtil {
 		return null;
 	}
 
-	private Claims getClaims(String token) throws InvalidTokenException {
+	private Claims getClaims(String token) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token).getBody();
 		} catch (ExpiredJwtException e) {
-			throw new InvalidTokenException("Login expirado");
+			throw new InvalidTokenException("Login expirado!");
+		} catch (SignatureException e) {
+			throw new InvalidTokenException("Assinatura não reconhecida!");
 		}
 	}
 }

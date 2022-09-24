@@ -1,5 +1,12 @@
 package br.com.jogo.config;
 
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,14 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import br.com.jogo.security.JWTAuthenticationFilter;
 import br.com.jogo.security.JWTAuthorizationFilter;
 import br.com.jogo.security.JWTUtil;
-
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
+import br.com.jogo.services.EmailService;
+import br.com.jogo.services.SmtpEmailService;
 
 @Configuration
 @EnableWebSecurity
@@ -35,15 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 	@Autowired
 	private JWTUtil jwtUtil;
-	private static final String[] PUBLIC_MATCHERS = { "/**" };
-	private static final String[] PUBLIC_MATCHERS_GET = { "/**" };
+	private static final String[] PUBLIC_MATCHERS = {};
+	private static final String[] PUBLIC_MATCHERS_GET = { "/**"};
 	private static final String[] PUBLIC_MATCHERS_POST = { "/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable();
 		}
+
 		http.cors().and().csrf().disable();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll().antMatchers(PUBLIC_MATCHERS).permitAll()
@@ -71,5 +74,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }

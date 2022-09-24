@@ -143,12 +143,12 @@ public class Jogo {
 		}
 		Jogador jog = findJogador(userss.getId());
 		obj.setJogador(jog);
-		if (obj.getQuestoes() != null) {
+		if (obj.getQuestoes() != null || !obj.getQuestoes().isEmpty()) {
 			obj = new ConfiguracaoPartida(jog,
 					obj.getQuestoes().stream().map(x -> questaoService.find(x.getId())).collect(Collectors.toSet()));
 		} else {
 			obj = new ConfiguracaoPartida(jog, obj.getNivel());
-			if (obj.getCategorias() != null) {
+			if (obj.getCategorias() != null || !obj.getCategorias().isEmpty()) {
 				obj.setCategorias(obj.getCategorias().stream().map(x -> categoriaService.find(x.getId()))
 						.collect(Collectors.toSet()));
 			}
@@ -323,6 +323,16 @@ public class Jogo {
 
 	public List<RegistroPartida> rankRegistroPartida() {
 		return registroPartidaService.rank();
+	}
+	
+	// -----------------------------Usuario-----------------------------
+	
+	public Usuario findUsuarioByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.getUsername().equals(email)) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		return usuarioService.findByEmail(email);
 	}
 
 	// -----------------------------Autenticação-----------------------------

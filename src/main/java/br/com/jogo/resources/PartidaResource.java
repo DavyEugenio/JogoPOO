@@ -97,13 +97,13 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@RequestMapping(value="/rank", method = RequestMethod.GET)
+	@RequestMapping(value="/ranking", method = RequestMethod.GET)
 	public ResponseEntity<List<RankingDTO>> rankRegistroPartidas() {
 		List<RankingDTO> list = jogo.rankRegistroPartida().stream().map(x -> new RankingDTO(x.getJogador(), x.getPontuacao())).toList();
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@RequestMapping(value="/rank/configuracao/{id}", method = RequestMethod.GET)
+	@RequestMapping(value="/ranking/configuracao/{id}", method = RequestMethod.GET)
 	public ResponseEntity<List<RankingDTO>> rankRegistroPartidas(@PathVariable Integer id) {
 		ConfiguracaoPartida cp = new ConfiguracaoPartida();
 		cp.setId(id);

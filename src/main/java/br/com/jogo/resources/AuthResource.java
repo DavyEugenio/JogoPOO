@@ -28,12 +28,15 @@ public class AuthResource {
 	@Autowired
 	private Jogo jogo;
 
-	@RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
+	@RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
 	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
 		UserSS user = UserService.authenticated();
-		String token = jwtUtil.generateAuthToken(user.getUsername());
-		response.addHeader("Authorization", "Bearer " + token);
-		response.addHeader("access-control-expose-headers", "Authorization");
+		if(user != null) {
+			System.out.println(user.getUsername());
+			String token = jwtUtil.generateAuthToken(user.getUsername());
+			response.addHeader("Authorization", "Bearer " + token);
+			response.addHeader("access-control-expose-headers", "Authorization");
+		}
 		return ResponseEntity.noContent().build();
 	}
 

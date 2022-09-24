@@ -34,6 +34,12 @@ public class JogadorResource {
 		Jogador obj = jogo.findJogador(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	@RequestMapping(value = "/email", method = RequestMethod.GET)
+	public ResponseEntity<Jogador> findByEmail(@RequestParam(value = "value") String email) {
+		Jogador obj = (Jogador) jogo.findUsuarioByEmail(email);
+		return ResponseEntity.ok().body(obj);
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody UsuarioNewDTO objNewDto) {

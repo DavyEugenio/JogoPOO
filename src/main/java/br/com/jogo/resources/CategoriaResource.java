@@ -33,6 +33,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody CategoriaNewDTO objNewDto) {
 		Categoria obj = jogo.insertCategoria(objNewDto.toEntity());
@@ -40,6 +41,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
 		Categoria obj = objDto.toEntity();
@@ -48,13 +50,13 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		jogo.deleteCategoria(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 		List<Categoria> list = jogo.findAllCategorias();
