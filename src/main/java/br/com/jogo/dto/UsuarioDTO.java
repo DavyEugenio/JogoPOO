@@ -18,10 +18,10 @@ public class UsuarioDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	@NotEmpty(message = "Preenchimento obrigatório!")
-	@Length(min = 3, max = 120, message = "O tamanho de ser entre 5 e 120 caracters")
+	@Length(min = 3, max = 120, message = "O tamanho de ser entre 3 e 120 caracters")
 	private String nome;
 	@NotEmpty(message = "Preenchimento obrigatório!")
-	@Length(min = 3, max = 20, message = "O tamanho de ser entre 5 e 120 caracters")
+	@Length(min = 3, max = 20, message = "O tamanho de ser entre 3 e 120 caracters")
 	private String nomeUsuario;
 	@NotEmpty(message = "Preenchimento obrigatório!")
 	@Email(message = "Email inválido!")
