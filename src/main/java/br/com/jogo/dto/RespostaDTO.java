@@ -25,16 +25,8 @@ public class RespostaDTO implements Serializable {
 		return registroPartidaId;
 	}
 
-	public void setRegistroPartidaId(Integer registroPartidaId) {
-		this.registroPartidaId = registroPartidaId;
-	}
-
 	public Integer getAlternativaId() {
 		return alternativaId;
-	}
-
-	public void setAlternativaId(Integer alternativaId) {
-		this.alternativaId = alternativaId;
 	}
 
 	public RegistroPartida getRegistroPartida() {
@@ -43,10 +35,5 @@ public class RespostaDTO implements Serializable {
 
 	public Alternativa getAlternativa() {
 		return new Alternativa(alternativaId, null, false);
-	}
-
-	@Override
-	public String toString() {
-		return "RespostaDTO [registroPartidaId=" + registroPartidaId + ", alternativaId=" + alternativaId + "]";
 	}
 }
