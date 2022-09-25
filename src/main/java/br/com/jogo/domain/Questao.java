@@ -88,7 +88,7 @@ public class Questao implements Serializable {
 	}
 	
 	@JsonIgnore
-	public Alternativa getCorrectAlternativa() {
+	public Alternativa getCorrectAlternative() {
 		return this.alternativas.stream().filter(x->x.isCorreta()).findFirst().get();
 	}
 

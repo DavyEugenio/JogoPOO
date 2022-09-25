@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.jogo.domain.Usuario;
 import br.com.jogo.security.JWTUtil;
-import br.com.jogo.services.exceptions.InvalidTokenException;
+import br.com.jogo.security.exceptions.InvalidTokenException;
 
 @Service
 public class AuthService {

@@ -19,7 +19,9 @@ public class RegistroPartidaNewDTO implements Serializable {
 	
 	public RegistroPartida toEntity() {
 		if (configuracaoPartidaId != null) {
-			return new RegistroPartida(new ConfiguracaoPartida(configuracaoPartidaId, null, null), null);
+			ConfiguracaoPartida cp = new ConfiguracaoPartida();
+			cp.setId(configuracaoPartidaId);
+			return new RegistroPartida(cp, null);
 		}
 		return new RegistroPartida();
 	}

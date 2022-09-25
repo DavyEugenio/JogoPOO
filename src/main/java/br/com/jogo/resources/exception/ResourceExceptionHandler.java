@@ -10,10 +10,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import br.com.jogo.security.exceptions.AuthorizationException;
 import br.com.jogo.security.exceptions.InvalidTokenException;
-import br.com.jogo.services.exceptions.AuthorizationException;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.FileException;
+import br.com.jogo.services.exceptions.IncorrectAlternativeException;
+import br.com.jogo.services.exceptions.InvalidNextQuestionException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -74,9 +76,23 @@ public class ResourceExceptionHandler {
 	}
 
 	@ExceptionHandler(FileException.class)
-	public ResponseEntity<StandardError> iOException(FileException e, HttpServletRequest request) {
+	public ResponseEntity<StandardError> fileException(FileException e, HttpServletRequest request) {
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
 				"Erro ao tentar acesar a imagem", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
+	}
+	
+	@ExceptionHandler(InvalidNextQuestionException.class)
+	public ResponseEntity<StandardError> invalidNextQuestionException(InvalidNextQuestionException e, HttpServletRequest request) {
+		StandardError err = new StandardError(System.currentTimeMillis(), 210,
+				"Vitória", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(210).body(err);
+	}
+	
+	@ExceptionHandler(IncorrectAlternativeException.class)
+	public ResponseEntity<StandardError> incorrectAlternativeException(IncorrectAlternativeException e, HttpServletRequest request) {
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value(),
+				"Resposta Incorreta", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(err);
 	}
 }

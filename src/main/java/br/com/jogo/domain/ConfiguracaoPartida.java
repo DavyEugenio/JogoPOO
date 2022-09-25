@@ -151,4 +151,11 @@ public class ConfiguracaoPartida implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "ConfiguracaoPartida [id=" + id + ", nivel=" + nivel + ", predefinida=" + predefinida
+				+ ", registroPartidas=" + registroPartidas + ", jogador=" + jogador + ", questoes=" + questoes
+				+ ", categorias=" + categorias + "]";
+	}
+
 }

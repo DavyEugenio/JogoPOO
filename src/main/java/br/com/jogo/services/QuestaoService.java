@@ -84,26 +84,26 @@ public class QuestaoService {
 		return ids;
 	}
 
-	public Questao findOneNotIn(Set<Questao> questoes) {
+	public Questao findOneNotIn(Set<Questao> questoes) throws ObjectNotFoundException {
 		Optional<Questao> obj = repository.findDistinctFirstByIdNotIn(SetOfIdsQuestoes(questoes));
 		return obj.orElseThrow(
 				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
-	public Questao findOneByCategoria(Set<Categoria> categorias, Set<Questao> questoes) {
+	public Questao findOneByCategoria(Set<Categoria> categorias, Set<Questao> questoes) throws ObjectNotFoundException {
 		Optional<Questao> obj = repository.findDistinctFirstByCategoriaNotInAndIdNotIn(categorias,
 				SetOfIdsQuestoes(questoes));
 		return obj.orElseThrow(
 				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
-	public Questao findOneByNivel(int nivel, Set<Questao> questoes) {
+	public Questao findOneByNivel(int nivel, Set<Questao> questoes) throws ObjectNotFoundException {
 		Optional<Questao> obj = repository.findDistinctFirstByNivelAndIdNotIn(nivel, SetOfIdsQuestoes(questoes));
 		return obj.orElseThrow(
 				() -> new ObjectNotFoundException("Objeto não encontrado, Tipo: " + Questao.class.getName()));
 	}
 
-	public Questao findOneByNivelAndCategoria(int nivel, Set<Categoria> categorias, Set<Questao> questoes) {
+	public Questao findOneByNivelAndCategoria(int nivel, Set<Categoria> categorias, Set<Questao> questoes) throws ObjectNotFoundException {
 		Optional<Questao> obj = repository.findDistinctFirstByNivelAndCategoriaNotInAndIdNotIn(nivel,
 				categorias, SetOfIdsQuestoes(questoes));
 		return obj.orElseThrow(

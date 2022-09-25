@@ -1,4 +1,4 @@
-package br.com.jogo.services.exceptions;
+package br.com.jogo.security.exceptions;
 
 public class InvalidRoleUser extends RuntimeException{
 	

@@ -60,6 +60,18 @@ public class Jogador extends Usuario {
 		ultimoAcesso = today;
 	}
 	
+	public void addPontuacao(int pontos) {
+		this.pontuacaoTotal += pontos;
+	}
+	
+	public void addQtdPartidas() {
+		this.pontuacaoTotal++;
+	}
+	
+	public void addSaldo(int saldo) {
+		this.saldo += saldo;
+	}
+	
 	public int getNumeroPartidas() {
 		return qtdPartidas;
 	}
@@ -70,10 +82,6 @@ public class Jogador extends Usuario {
 
 	public int getPontuacaoTotal() {
 		return pontuacaoTotal;
-	}
-
-	public void addPontuacao(int pontos) {
-		this.pontuacaoTotal += pontos;
 	}
 
 	public void setPontuacaoTotal(int pontuacaoTotal) {

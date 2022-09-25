@@ -15,7 +15,7 @@ public class QuestaoDTO implements Serializable {
 	private Integer id;
 	private String texto;
 	private int nivel;
-	private Integer categoria;
+	private Integer categoriaId;
 	private Set<AlternativaBasicData> alternativas;
 
 	public QuestaoDTO() {
@@ -25,7 +25,7 @@ public class QuestaoDTO implements Serializable {
 		this.id = obj.getId();
 		this.texto = obj.getTexto();
 		this.nivel = obj.getNivel();
-		this.categoria = obj.getCategoria().getId();
+		this.categoriaId = obj.getCategoria().getId();
 		this.alternativas = obj.getAlternativas().stream().map(AlternativaDTO::new).collect(Collectors.toSet());
 	}
 
@@ -41,8 +41,8 @@ public class QuestaoDTO implements Serializable {
 		return nivel;
 	}
 
-	public Integer getCategoria() {
-		return categoria;
+	public Integer getCategoriaId() {
+		return categoriaId;
 	}
 
 	public Set<AlternativaBasicData> getAlternativas() {
@@ -50,7 +50,7 @@ public class QuestaoDTO implements Serializable {
 	}
 
 	public Questao toEntity() {
-		return new Questao(id, texto, nivel, new Categoria(categoria, null),
+		return new Questao(id, texto, nivel, new Categoria(categoriaId, null),
 				alternativas.stream().map(a -> ((AlternativaNewDTO) a).toEntity()).collect(Collectors.toSet()));
 	}
 }
