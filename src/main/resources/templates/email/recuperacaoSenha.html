@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:remove="all">Order Confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+        <h2>Recuperação de Senha:</h2>
+        <p>
+            Oi, <span th:text="${usuario.nome}"></span>. Para cadastrar uma nova senha clique <a th:href="${passwordRecoveryURL}">aqui</a> ou copie e cole em seu navegador o link abaixo:<br>
+            <span th:text="${passwordRecoveryURL}"></span>
+        </p>
+        <h4>Obs.: O link acima possui validade de 3 horas a partir de sua emissão podendo ser usado apenas uma vez, sendo então necessário solicitar novamente a recuperação da senha após sua expiração.</h4>
+</body>
+
+</html>
