@@ -65,7 +65,7 @@ public class Jogador extends Usuario {
 	}
 	
 	public void addQtdPartidas() {
-		this.pontuacaoTotal++;
+		this.qtdPartidas++;
 	}
 	
 	public void addSaldo(int saldo) {

@@ -22,8 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import br.com.jogo.security.JWTAuthenticationFilter;
 import br.com.jogo.security.JWTAuthorizationFilter;
 import br.com.jogo.security.JWTUtil;
-import br.com.jogo.services.EmailService;
-import br.com.jogo.services.SmtpEmailService;
 
 @SuppressWarnings("deprecation")
 @Configuration

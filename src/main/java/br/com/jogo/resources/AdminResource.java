@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.jogo.domain.Admin;
-import br.com.jogo.domain.Jogador;
 import br.com.jogo.dto.UsuarioDTO;
 import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.facade.Jogo;

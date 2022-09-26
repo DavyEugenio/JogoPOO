@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jogo.domain.SenhaDTO;
 import br.com.jogo.dto.EmailDTO;
+import br.com.jogo.dto.SenhaUpdateDTO;
 import br.com.jogo.facade.Jogo;
 import br.com.jogo.security.JWTUtil;
 import br.com.jogo.security.UserSS;
@@ -41,14 +42,20 @@ public class AuthResource {
 	}
 
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
-	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO emailDTO) {
-		jogo.sendRecoveryPassword(emailDTO.getEmail());
+	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDto) {
+		jogo.sendRecoveryPassword(objDto.getEmail());
 		return ResponseEntity.noContent().build();
 	}
 
 	@RequestMapping(value = "/recoverPassword/{token}", method = RequestMethod.POST)
 	public ResponseEntity<Void> recoverPassword(@Valid @RequestBody SenhaDTO senhaDTO, @PathVariable String token) {
 		jogo.insertNewPassword(senhaDTO.getSenha(), token);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value = "/password", method = RequestMethod.PUT)
+	public ResponseEntity<Void> updateSenha(@Valid @RequestBody SenhaUpdateDTO objDto) {
+		jogo.updateSenha(objDto.getNovaSenha(), objDto.getSenha());
 		return ResponseEntity.noContent().build();
 	}
 }

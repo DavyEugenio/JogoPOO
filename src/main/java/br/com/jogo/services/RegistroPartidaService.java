@@ -46,6 +46,7 @@ public class RegistroPartidaService {
 		aux.setPontuacao(obj.getPontuacao());
 		aux.setQuestoesRespondidas(obj.getQuestoesRepondias());
 		aux.setUltimaQuestao(obj.getUltimaQuestao());
+		aux.setJogador(obj.getJogador());
 	}
 
 	public void delete(Integer id) {

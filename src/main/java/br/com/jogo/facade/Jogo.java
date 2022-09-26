@@ -23,6 +23,9 @@ import br.com.jogo.domain.RegistroPartida;
 import br.com.jogo.domain.Usuario;
 import br.com.jogo.domain.enums.Role;
 import br.com.jogo.security.UserSS;
+import br.com.jogo.security.exceptions.AuthorizationException;
+import br.com.jogo.security.exceptions.InvalidRoleUser;
+import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.AdminService;
 import br.com.jogo.services.AlternativaService;
 import br.com.jogo.services.AuthService;
@@ -39,9 +42,6 @@ import br.com.jogo.services.UsuarioService;
 import br.com.jogo.services.exceptions.ActivationException;
 import br.com.jogo.services.exceptions.IncorrectAlternativeException;
 import br.com.jogo.services.exceptions.InvalidNextQuestionException;
-import br.com.jogo.security.exceptions.AuthorizationException;
-import br.com.jogo.security.exceptions.InvalidRoleUser;
-import br.com.jogo.security.exceptions.InvalidTokenException;
 import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @Component
@@ -355,6 +355,29 @@ public class Jogo {
 		}
 	}
 
+	public Usuario updateSenha(String novaSenha, String senha) {
+		UserSS userss = UserService.authenticated();
+		Usuario usuario;
+		if (userss == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		if (userss.hasRole(Role.JOGADOR)) {
+			usuario = findJogador(userss.getId());
+		} else {
+			usuario = findAdmin(userss.getId());
+		}
+
+		if (!pe.matches(senha, usuario.getSenha())) {
+			throw new AuthorizationException("Senha incorreta");
+		}
+		usuario.setSenha(pe.encode(novaSenha));
+		if (userss.hasRole(Role.JOGADOR)) {
+			return updateJogador((Jogador) usuario);
+		} else {
+			return updateAdmin((Admin) usuario);
+		}
+	}
+
 	// -----------------------------Regras Jogo-----------------------------
 
 	public void answerQuestion(RegistroPartida registroPartida, Alternativa alternativa) throws AuthorizationException,
@@ -395,7 +418,6 @@ public class Jogo {
 				}
 			}
 			rp.setUltimaQuestao(nextQ);
-
 		} else {
 			rp.getJogador().addQtdPartidas();
 			rp.setAtiva(false);
