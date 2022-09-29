@@ -37,13 +37,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
 			if (auth != null) {
 				SecurityContextHolder.getContext().setAuthentication(auth);
-				
 			}
 		}
 		chain.doFilter(request, response);
 	}
 
-	private UsernamePasswordAuthenticationToken getAuthentication(String token) throws InvalidTokenException{
+	private UsernamePasswordAuthenticationToken getAuthentication(String token) throws InvalidTokenException {
 		if (jwtUtil.validToken(token)) {
 			String username = jwtUtil.getSubject(token);
 			UserDetails user = userDetailsService.loadUserByUsername(username);

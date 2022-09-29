@@ -19,13 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.jogo.dto.CredenciaisDTO;
+import br.com.jogo.security.exceptions.InvalidTokenException;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private AuthenticationManager authenticationManager;
 	private JWTUtil jwtUtil;
 
-	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) throws InvalidTokenException {
 		setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
@@ -47,7 +48,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication authResult) throws IOException, ServletException {
+			Authentication authResult) throws IOException, ServletException, InvalidTokenException{
 		String username = ((UserSS) authResult.getPrincipal()).getUsername();
 		System.out.println((UserSS) authResult.getPrincipal());
 		String token = jwtUtil.generateAuthToken(username);

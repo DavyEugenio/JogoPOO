@@ -60,7 +60,7 @@ public class JWTUtil {
 		return null;
 	}
 
-	private Claims getClaims(String token) {
+	private Claims getClaims(String token) throws InvalidTokenException{
 		try {
 			return Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token).getBody();
 		} catch (ExpiredJwtException e) {

@@ -397,27 +397,13 @@ public class Jogo {
 		if (!rp.isAtiva()) {
 			throw new ActivationException("A partida está inativa!");
 		}
-		ConfiguracaoPartida cp = rp.getConfiguracaoPartida();
 		Alternativa a = findAlternativa(alternativa.getId());
 		Questao q = questaoService.findByAlternativa(a);
 		if (!rp.getUltimaQuestao().equals(q)) {
 			throw new ObjectNotFoundException("A alternativa Não pertece a uma questao da partida!");
 		}
 		if (a.isCorreta()) {
-			rp.addPontuacao(q.getNivel());
-			rp.getJogador().addPontuacao(q.getNivel());
-			rp.getJogador().addSaldo(q.getNivel());
-			rp.addQuestoes(q);
-			Questao nextQ = nextQuestionRegistroPartida(rp);
-			if (nextQ == null) {
-				rp.setAtiva(false);
-				rp.getJogador().addQtdPartidas();
-			} else {
-				if (!cp.isPredefinida()) {
-					cp.addQuestao(nextQ);
-				}
-			}
-			rp.setUltimaQuestao(nextQ);
+			correctAnswer(rp, q);
 		} else {
 			rp.getJogador().addQtdPartidas();
 			rp.setAtiva(false);
@@ -430,6 +416,23 @@ public class Jogo {
 				throw new InvalidNextQuestionException("Não há questoes disponiveis para o jogo!");
 			}
 		}
+	}
+	
+	private void correctAnswer(RegistroPartida rp, Questao q) {
+		rp.addPontuacao(q.getNivel());
+		rp.getJogador().addPontuacao(q.getNivel());
+		rp.getJogador().addSaldo(q.getNivel());
+		rp.addQuestoes(q);
+		Questao nextQ = nextQuestionRegistroPartida(rp);
+		if (nextQ == null) {
+			rp.setAtiva(false);
+			rp.getJogador().addQtdPartidas();
+		} else {
+			if (!rp.getConfiguracaoPartida().isPredefinida()) {
+				rp.getConfiguracaoPartida().addQuestao(nextQ);
+			}
+		}
+		rp.setUltimaQuestao(nextQ);
 	}
 
 	private Questao nextQuestionRegistroPartida(RegistroPartida obj) {

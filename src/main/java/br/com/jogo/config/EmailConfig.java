@@ -9,7 +9,7 @@ import br.com.jogo.services.SmtpEmailService;
 @Configuration
 public class EmailConfig {
 	@Bean
-	public EmailService emailService() {
+	EmailService emailService() {
 		return new SmtpEmailService();
 	}
 }
