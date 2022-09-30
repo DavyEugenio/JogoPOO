@@ -105,7 +105,7 @@ public class Jogo {
 
 	// --------------------------------Alternativa----------------------------------------------
 
-	public Alternativa findAlternativa(Integer id) {
+	private Alternativa findAlternativa(Integer id) {
 		return alternativaService.find(id);
 	}
 

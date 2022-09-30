@@ -25,7 +25,7 @@ public class QuestaoNewDTO implements Serializable {
 	private int nivel;
 	@NotNull(message = "Preenchimento obrigatório")
 	@Min(message = "ID inválido", value = 1)
-	private Integer categoria;
+	private Integer categoriaId;
 	@NotNull(message = "Preenchimento obrigatório!")
 	private Set<AlternativaNewDTO> alternativas;
 
@@ -40,8 +40,8 @@ public class QuestaoNewDTO implements Serializable {
 		return nivel;
 	}
 
-	public Integer getCategoria() {
-		return categoria;
+	public Integer getCategoriaId() {
+		return categoriaId;
 	}
 
 	public Set<AlternativaNewDTO> getAlternativas() {
@@ -49,7 +49,7 @@ public class QuestaoNewDTO implements Serializable {
 	}
 
 	public Questao toEntity() {
-		return new Questao(texto, nivel, new Categoria(categoria, null),
+		return new Questao(texto, nivel, new Categoria(categoriaId, null),
 				alternativas.stream().map(a -> a.toEntity()).collect(Collectors.toSet()));
 	}
 }
