@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.jogo.domain.SenhaDTO;
 import br.com.jogo.dto.EmailDTO;
+import br.com.jogo.dto.SenhaDTO;
 import br.com.jogo.dto.SenhaUpdateDTO;
 import br.com.jogo.facade.Jogo;
 import br.com.jogo.security.JWTUtil;

@@ -73,8 +73,8 @@ public class ImageService {
 	}
 
 	public File findImage(String fileName) {
-		String caminho = localStorage + "/" + fileName;
-		File file = new File(caminho);
+		String path = localStorage + "/" + fileName;
+		File file = new File(path);
 		if (file.exists()) {
 			return file;
 		} else {
@@ -84,8 +84,8 @@ public class ImageService {
 	}
 
 	public URI uploadImage(InputStream img, String fileName) {
-		String caminho = localStorage + "/" + fileName;
-		File file = new File(caminho);
+		String path = localStorage + "/" + fileName;
+		File file = new File(path);
 		try {
 			FileUtils.copyInputStreamToFile(img, file);
 		} catch (IOException e) {
@@ -95,7 +95,6 @@ public class ImageService {
 	}
 
 	public void deleteImage(String fileName) throws ObjectNotFoundException {
-		findImage(fileName);
 		File file = findImage(fileName);
 		file.delete();
 	}

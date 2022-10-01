@@ -1,4 +1,4 @@
-package br.com.jogo.domain;
+package br.com.jogo.dto;
 
 import java.io.Serializable;
 
