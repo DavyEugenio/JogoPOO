@@ -17,7 +17,7 @@ public class AlternativaService {
 	@Autowired
 	private AlternativaRepository repository;
 
-	public Alternativa find(Integer id) {
+	public Alternativa find(Integer id) throws ObjectNotFoundException {
 		Optional<Alternativa> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Alternativa.class.getName()));
@@ -30,7 +30,6 @@ public class AlternativaService {
 				updateData(newObjs.get(i), alt);
 				System.out.println(alt);
 				i++;
-
 			}
 			return Set.copyOf(repository.saveAll(objs));
 		} else {

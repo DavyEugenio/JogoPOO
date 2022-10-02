@@ -21,7 +21,7 @@ public class ConfiguracaoPartidaService {
 	@Autowired
 	private ConfiguracaoPartidaRepository repository;
 
-	public ConfiguracaoPartida find(Integer id) {
+	public ConfiguracaoPartida find(Integer id) throws ObjectNotFoundException {
 		Optional<ConfiguracaoPartida> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + ConfiguracaoPartida.class.getName()));

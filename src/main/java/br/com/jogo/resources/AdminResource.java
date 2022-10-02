@@ -20,6 +20,7 @@ import br.com.jogo.domain.Admin;
 import br.com.jogo.dto.UsuarioDTO;
 import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.facade.Jogo;
+import br.com.jogo.security.exceptions.AuthorizationException;
 
 @RestController
 @RequestMapping(path = "/admins")
@@ -28,13 +29,13 @@ public class AdminResource {
 	Jogo jogo;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Admin> find(@PathVariable Integer id) {
+	public ResponseEntity<Admin> find(@PathVariable Integer id) throws AuthorizationException {
 		Admin obj = jogo.findAdmin(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public ResponseEntity<Admin> findByEmail(@RequestParam(value = "value") String email) {
+	public ResponseEntity<Admin> findByEmail(@RequestParam(value = "value") String email) throws AuthorizationException {
 		Admin obj = (Admin) jogo.findUsuarioByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}

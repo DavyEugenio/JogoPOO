@@ -25,7 +25,7 @@ public class AuthService {
 				+ obj.getEmail();
 	}
 
-	public String[] recoverEmailAndPasswordbyToken(String token) {
+	public String[] recoverEmailAndPasswordbyToken(String token) throws InvalidTokenException{
 		if (jwtUtil.validToken(token)) {
 			return jwtUtil.getSubject(token).split("YN9YxSenhaYN9Yx");
 		} else {

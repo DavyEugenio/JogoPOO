@@ -20,7 +20,7 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repository;
 
-	public Categoria find(Integer id) {
+	public Categoria find(Integer id) throws ObjectNotFoundException {
 		Optional<Categoria> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Categoria.class.getName()));

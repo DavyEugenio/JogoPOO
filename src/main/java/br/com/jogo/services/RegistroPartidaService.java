@@ -22,7 +22,7 @@ public class RegistroPartidaService {
 	@Autowired
 	private RegistroPartidaRepository repository;
 
-	public RegistroPartida find(Integer id) {
+	public RegistroPartida find(Integer id) throws ObjectNotFoundException {
 		Optional<RegistroPartida> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + RegistroPartida.class.getName()));

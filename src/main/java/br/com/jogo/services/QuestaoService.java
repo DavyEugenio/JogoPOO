@@ -24,7 +24,7 @@ public class QuestaoService {
 	@Autowired
 	private QuestaoRepository repository;
 
-	public Questao find(Integer id) {
+	public Questao find(Integer id) throws ObjectNotFoundException{
 		Optional<Questao> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Questao.class.getName()));
@@ -68,7 +68,7 @@ public class QuestaoService {
 		return repository.findAll();
 	}
 
-	public Questao findByAlternativa(Alternativa alternativa) {
+	public Questao findByAlternativa(Alternativa alternativa) throws ObjectNotFoundException {
 		Optional<Questao> obj = repository.findByAlternativas(alternativa);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id da alternativa: " + alternativa.getId() + ", Tipo: " + Questao.class.getName()));

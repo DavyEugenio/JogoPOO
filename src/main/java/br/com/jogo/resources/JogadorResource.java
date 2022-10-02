@@ -22,6 +22,7 @@ import br.com.jogo.dto.RankingDTO;
 import br.com.jogo.dto.UsuarioDTO;
 import br.com.jogo.dto.UsuarioNewDTO;
 import br.com.jogo.facade.Jogo;
+import br.com.jogo.security.exceptions.AuthorizationException;
 
 @RestController
 @RequestMapping(path = "/jogadores")
@@ -36,7 +37,7 @@ public class JogadorResource {
 	}
 	
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public ResponseEntity<Jogador> findByEmail(@RequestParam(value = "value") String email) {
+	public ResponseEntity<Jogador> findByEmail(@RequestParam(value = "value") String email) throws AuthorizationException {
 		Jogador obj = (Jogador) jogo.findUsuarioByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}
@@ -77,13 +78,13 @@ public class JogadorResource {
 	}
 	
 	@RequestMapping(value = "/picture", method = RequestMethod.POST)
-	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) throws AuthorizationException{
 		URI uri = jogo.uploadProfilePictureOfJogador(file);
 		return ResponseEntity.created(uri).build();
 	}
 
 	@RequestMapping(value = "/picture", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteProfilePicture() {
+	public ResponseEntity<Void> deleteProfilePicture() throws AuthorizationException{
 		jogo.deleteProfilePictureOfJogador();
 		return ResponseEntity.noContent().build();
 	}

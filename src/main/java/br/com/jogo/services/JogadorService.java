@@ -20,7 +20,7 @@ public class JogadorService {
 	@Autowired
 	private JogadorRepository repository;
 
-	public Jogador find(Integer id) {
+	public Jogador find(Integer id) throws ObjectNotFoundException {
 		Optional<Jogador> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Jogador.class.getName()));

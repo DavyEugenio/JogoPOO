@@ -15,25 +15,25 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository repository;
 
-	public Usuario findByEmail(String email) {
+	public Usuario findByEmail(String email) throws ObjectNotFoundException{
 		Optional<Usuario> obj = repository.findByEmail(email);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, E-mail: " + email + ", Tipo: " + Usuario.class.getName()));
 	}
 
-	public Usuario find(Integer id) {
+	public Usuario find(Integer id) throws ObjectNotFoundException {
 		Optional<Usuario> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Usuario.class.getName()));
 	}
 
-	public void updatePassword(Usuario obj, String password) {
+	public void updatePassword(Usuario obj, String password) throws ObjectNotFoundException {
 		obj = find(obj.getId());
 		obj.setSenha(password);
 		repository.save(obj);
 	}
 
-	public void registerAccess(String email) {
+	public void registerAccess(String email) throws ObjectNotFoundException {
 		Usuario obj = findByEmail(email);
 		if (obj instanceof Jogador) {
 			((Jogador) obj).registerAccess();
