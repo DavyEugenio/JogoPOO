@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import br.com.jogo.security.exceptions.InvalidTokenException;
@@ -20,7 +21,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
 	private UserDetailsService userDetailsService;
-	
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
 			UserDetailsService userDetailsService) {
@@ -42,7 +42,8 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		chain.doFilter(request, response);
 	}
 
-	private UsernamePasswordAuthenticationToken getAuthentication(String token) throws InvalidTokenException {
+	private UsernamePasswordAuthenticationToken getAuthentication(String token)
+			throws InvalidTokenException, UsernameNotFoundException {
 		if (jwtUtil.validToken(token)) {
 			String username = jwtUtil.getSubject(token);
 			UserDetails user = userDetailsService.loadUserByUsername(username);

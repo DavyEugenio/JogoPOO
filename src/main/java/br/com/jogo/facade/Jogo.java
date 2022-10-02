@@ -78,7 +78,7 @@ public class Jogo {
 
 	// --------------------------------Admin----------------------------------------------
 
-	public Admin findAdmin(Integer id) {
+	public Admin findAdmin(Integer id) throws AuthorizationException {
 		UserSS userss = UserService.authenticated();
 		if (userss == null || !userss.hasRole(Role.ADMIN) && !id.equals(userss.getId())) {
 			throw new AuthorizationException("Acesso negado!");
@@ -132,7 +132,8 @@ public class Jogo {
 	}
 
 	// --------------------------------ConfiguracaoPartida----------------------------------------------
-	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartida obj) {
+	public ConfiguracaoPartida insertConfiguracaoPartida(ConfiguracaoPartida obj)
+			throws AuthorizationException, InvalidRoleUser, ObjectNotFoundException {
 		UserSS userss = UserService.authenticated();
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
@@ -219,7 +220,7 @@ public class Jogo {
 		return jogadorService.rank();
 	}
 
-	public URI uploadProfilePictureOfJogador(MultipartFile multipartFile) {
+	public URI uploadProfilePictureOfJogador(MultipartFile multipartFile) throws AuthorizationException {
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.hasRole(Role.JOGADOR)) {
 			throw new AuthorizationException("Acesso negado");
@@ -269,7 +270,7 @@ public class Jogo {
 
 	// -------------------------------------RegistroPartida-----------------------------------------
 
-	public RegistroPartida insertRegistroPartida(RegistroPartida obj) {
+	public RegistroPartida insertRegistroPartida(RegistroPartida obj) throws AuthorizationException, InvalidRoleUser {
 		UserSS userss = UserService.authenticated();
 		if (userss == null) {
 			throw new AuthorizationException("Acesso negado!");
@@ -295,7 +296,7 @@ public class Jogo {
 		return registroPartidaService.insert(obj);
 	}
 
-	public Questao UltimaQuestaoRegistroPartida(Integer id) {
+	public Questao UltimaQuestaoRegistroPartida(Integer id) throws ActivationException {
 		RegistroPartida obj = findRegistroPartida(id);
 		if (!obj.isAtiva()) {
 			throw new ActivationException("A partida está inativa!");
@@ -331,7 +332,7 @@ public class Jogo {
 
 	// -----------------------------Usuario-----------------------------
 
-	public Usuario findUsuarioByEmail(String email) {
+	public Usuario findUsuarioByEmail(String email) throws AuthorizationException {
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.getUsername().equals(email)) {
 			throw new AuthorizationException("Acesso negado");
@@ -347,7 +348,7 @@ public class Jogo {
 		emailService.sendPassworRecoveyURLHtmlEmail(obj, authService.generateRecoveryPasswordUrl(obj, password));
 	}
 
-	public void insertNewPassword(String password, String token) {
+	public void insertNewPassword(String password, String token) throws InvalidTokenException {
 		String[] usernamePassword = authService.recoverEmailAndPasswordbyToken(token);
 		Usuario obj = usuarioService.findByEmail(usernamePassword[0]);
 		if (!obj.getSenha().equals(usernamePassword[1])) {
@@ -355,7 +356,7 @@ public class Jogo {
 		}
 	}
 
-	public Usuario updateSenha(String novaSenha, String senha) {
+	public Usuario updateSenha(String novaSenha, String senha) throws AuthorizationException {
 		UserSS userss = UserService.authenticated();
 		Usuario usuario;
 		if (userss == null) {
@@ -417,7 +418,7 @@ public class Jogo {
 			}
 		}
 	}
-	
+
 	private void correctAnswer(RegistroPartida rp, Questao q) {
 		rp.addPontuacao(q.getNivel());
 		rp.getJogador().addPontuacao(q.getNivel());
@@ -435,7 +436,7 @@ public class Jogo {
 		rp.setUltimaQuestao(nextQ);
 	}
 
-	private Questao nextQuestionRegistroPartida(RegistroPartida obj) {
+	private Questao nextQuestionRegistroPartida(RegistroPartida obj) throws InvalidNextQuestionException {
 		ConfiguracaoPartida cp = obj.getConfiguracaoPartida();
 		Questao nextQ = null;
 		if (!cp.isPredefinida()) {

@@ -2,6 +2,7 @@ package br.com.jogo.services;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImagingOpException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,7 +31,7 @@ public class ImageService {
 	@Value("${img.size}")
 	private Integer size;
 
-	public BufferedImage getJpgImageFromFile(MultipartFile uploadedFile) {
+	public BufferedImage getJpgImageFromFile(MultipartFile uploadedFile) throws FileException,IllegalArgumentException {
 		String ext = FilenameUtils.getExtension(uploadedFile.getOriginalFilename());
 		if (!"png".equalsIgnoreCase(ext) && !"jpg".equalsIgnoreCase(ext) && !"jpeg".equalsIgnoreCase(ext)) {
 			throw new FileException("Somente imagens JPG e PNG são permitidas!");
@@ -62,17 +63,17 @@ public class ImageService {
 		}
 	}
 
-	public BufferedImage cropSquare(BufferedImage sourceImg) {
+	public BufferedImage cropSquare(BufferedImage sourceImg) throws IllegalArgumentException, ImagingOpException {
 		int min = (sourceImg.getHeight() <= sourceImg.getWidth()) ? sourceImg.getHeight() : sourceImg.getWidth();
 		return Scalr.crop(sourceImg, (sourceImg.getWidth() / 2) - (min / 2), (sourceImg.getHeight() / 2) - (min / 2),
 				min, min);
 	}
 
-	public BufferedImage resize(BufferedImage sourceImg) {
+	public BufferedImage resize(BufferedImage sourceImg) throws IllegalArgumentException, ImagingOpException {
 		return Scalr.resize(sourceImg, Scalr.Method.ULTRA_QUALITY, size);
 	}
 
-	public File findImage(String fileName) {
+	public File findImage(String fileName) throws ObjectNotFoundException,NullPointerException{
 		String path = localStorage + "/" + fileName;
 		File file = new File(path);
 		if (file.exists()) {
@@ -83,7 +84,7 @@ public class ImageService {
 
 	}
 
-	public URI uploadImage(InputStream img, String fileName) {
+	public URI uploadImage(InputStream img, String fileName) throws NullPointerException {
 		String path = localStorage + "/" + fileName;
 		File file = new File(path);
 		try {

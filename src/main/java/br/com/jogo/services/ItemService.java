@@ -18,7 +18,7 @@ public class ItemService {
 	@Autowired
 	private ItemRepository repository;
 
-	public Item find(Integer id) {
+	public Item find(Integer id) throws ObjectNotFoundException {
 		Optional<Item> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Item.class.getName()));

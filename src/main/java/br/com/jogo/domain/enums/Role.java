@@ -20,7 +20,7 @@ public enum Role {
 		return descricao;
 	}
 
-	public static Role toEnum(Integer cod) {
+	public static Role toEnum(Integer cod) throws IllegalArgumentException {
 		if (cod == null) {
 			return null;
 		}

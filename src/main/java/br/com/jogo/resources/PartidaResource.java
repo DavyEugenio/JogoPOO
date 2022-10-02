@@ -25,6 +25,12 @@ import br.com.jogo.dto.RegistroPartidaDTO;
 import br.com.jogo.dto.RegistroPartidaNewDTO;
 import br.com.jogo.dto.RespostaDTO;
 import br.com.jogo.facade.Jogo;
+import br.com.jogo.security.exceptions.AuthorizationException;
+import br.com.jogo.security.exceptions.InvalidRoleUser;
+import br.com.jogo.services.exceptions.ActivationException;
+import br.com.jogo.services.exceptions.IncorrectAlternativeException;
+import br.com.jogo.services.exceptions.InvalidNextQuestionException;
+import br.com.jogo.services.exceptions.ObjectNotFoundException;
 
 @RestController
 @RequestMapping(path = "/partidas")
@@ -39,7 +45,8 @@ public class PartidaResource {
 	}
 
 	@RequestMapping(value = "/configuracoes", method = RequestMethod.POST)
-	public ResponseEntity<Integer> insertConfiguracaoPartida(@Valid @RequestBody ConfiguracaoPartidaNewDTO objNewDto) {
+	public ResponseEntity<Integer> insertConfiguracaoPartida(@Valid @RequestBody ConfiguracaoPartidaNewDTO objNewDto)
+			throws AuthorizationException, InvalidRoleUser, ObjectNotFoundException {
 		ConfiguracaoPartida obj = objNewDto.toEntity();
 		System.out.print(obj);
 		obj = jogo.insertConfiguracaoPartida(obj);
@@ -61,7 +68,8 @@ public class PartidaResource {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Integer> insert(@RequestBody RegistroPartidaNewDTO objNewDto) {
+	public ResponseEntity<Integer> insert(@RequestBody RegistroPartidaNewDTO objNewDto)
+			throws AuthorizationException, InvalidRoleUser {
 		RegistroPartida obj = jogo.insertRegistroPartida(objNewDto.toEntity());
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj.getId());
@@ -74,13 +82,14 @@ public class PartidaResource {
 	}
 
 	@RequestMapping(value = "/{id}/questao", method = RequestMethod.GET)
-	public ResponseEntity<QuestaoDTO> sendLastQuestion(@PathVariable Integer id) {
+	public ResponseEntity<QuestaoDTO> sendLastQuestion(@PathVariable Integer id) throws ActivationException {
 		QuestaoDTO obj = new QuestaoDTO(jogo.UltimaQuestaoRegistroPartida(id));
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@RequestMapping(value = "/jogador/{id}", method = RequestMethod.GET)
-	public ResponseEntity<List<RegistroPartidaDTO>> findActiveRegistroPartidaByJogador(@PathVariable Integer id) {
+	public ResponseEntity<List<RegistroPartidaDTO>> findActiveRegistroPartidaByJogador(@PathVariable Integer id)
+			throws ActivationException {
 		Jogador jog = new Jogador();
 		jog.setId(id);
 		List<RegistroPartidaDTO> list = jogo.findActiveByJogador(jog).stream().map(RegistroPartidaDTO::new).toList();
@@ -116,7 +125,8 @@ public class PartidaResource {
 	}
 
 	@RequestMapping(value = "/responder", method = RequestMethod.POST)
-	public ResponseEntity<Void> answerQuestion(@RequestBody RespostaDTO objDto) {
+	public ResponseEntity<Void> answerQuestion(@RequestBody RespostaDTO objDto) throws AuthorizationException,
+	ObjectNotFoundException, ActivationException, IncorrectAlternativeException, InvalidNextQuestionException {
 		jogo.answerQuestion(objDto.getRegistroPartida(), objDto.getAlternativa());
 		return ResponseEntity.accepted().build();
 	}

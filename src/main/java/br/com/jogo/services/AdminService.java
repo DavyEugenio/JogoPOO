@@ -20,7 +20,7 @@ public class AdminService {
 	@Autowired
 	private AdminRepository repository;
 
-	public Admin find(Integer id) {
+	public Admin find(Integer id) throws ObjectNotFoundException {
 		Optional<Admin> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado, Id: " + id + ", Tipo: " + Admin.class.getName()));
@@ -50,7 +50,7 @@ public class AdminService {
 		}
 	}
 
-	public void delete(Integer id) {
+	public void delete(Integer id) throws ObjectNotFoundException {
 		find(id);
 		try {
 			repository.deleteById(id);
