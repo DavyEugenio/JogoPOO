@@ -27,8 +27,7 @@ public class JogadorTests {
 		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
 		jog.addPontuacao(2);
 		assertEquals(2, jog.getPontuacaoTotal());
-		System.out.println("Pontuacao: " + jog.getPontuacaoTotal());
-
+		// System.out.println("Pontuacao: " + jog.getPontuacaoTotal());
 	}
 
 	@Test
@@ -66,4 +65,5 @@ public class JogadorTests {
 		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
 		return jog.getUltimoAcesso();
 	}
+
 }
