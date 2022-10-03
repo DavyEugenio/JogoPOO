@@ -28,10 +28,20 @@ class JogoPooApplicationTests {
 						new Alternativa("Mozart", false), new Alternativa("Paganini", false)));
 		qService.insert(q);
 	}
-	
+
 	@Test
 	void findOne() {
-		System.out.println(qService.findOneNotIn(Set.of(new Questao(1, null, 0, null, null),new Questao(2, null, 0, null, null))));
+		System.out.println(qService
+				.findOneNotIn(Set.of(new Questao(1, null, 0, null, null), new Questao(2, null, 0, null, null))));
+		
 	}
-	
+
+	@Test
+	void findQuest() {
+		System.out.println(qService.find(1));
+		qService.find(2);
+		qService.findAll();
+		qService.findOneByNivel(2, Set.of(new Questao(2, null, 0, null, null)));
+	}
+
 }
