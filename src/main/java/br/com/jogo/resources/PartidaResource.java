@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +39,14 @@ public class PartidaResource {
 	@Autowired
 	private Jogo jogo;
 
+	
 	@RequestMapping(value = "/configuracoes/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ConfiguracaoPartida> findConfiguracaoPartida(@PathVariable Integer id) {
 		ConfiguracaoPartida obj = jogo.findConfiguracaoPartida(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PreAuthorize("hasAnyRole('JOGADOR')")
 	@RequestMapping(value = "/configuracoes", method = RequestMethod.POST)
 	public ResponseEntity<Integer> insertConfiguracaoPartida(@Valid @RequestBody ConfiguracaoPartidaNewDTO objNewDto)
 			throws AuthorizationException, InvalidRoleUser, ObjectNotFoundException {
@@ -66,7 +69,15 @@ public class PartidaResource {
 				.toList();
 		return ResponseEntity.ok().body(list);
 	}
+	
+	@RequestMapping(value = "/configuracoes/predefinidas", method = RequestMethod.GET)
+	public ResponseEntity<List<ConfiguracaoPartidaDTO>> findPreseteds() {
+		List<ConfiguracaoPartidaDTO> list = jogo.findConfiguracaoPartidasPreseteds().stream().map(ConfiguracaoPartidaDTO::new)
+				.toList();
+		return ResponseEntity.ok().body(list);
+	}
 
+	@PreAuthorize("hasAnyRole('JOGADOR')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@RequestBody RegistroPartidaNewDTO objNewDto)
 			throws AuthorizationException, InvalidRoleUser {
@@ -81,6 +92,7 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PreAuthorize("hasAnyRole('JOGADOR')")
 	@RequestMapping(value = "/{id}/questao", method = RequestMethod.GET)
 	public ResponseEntity<QuestaoDTO> sendLastQuestion(@PathVariable Integer id) throws ActivationException {
 		QuestaoDTO obj = new QuestaoDTO(jogo.UltimaQuestaoRegistroPartida(id));
@@ -124,6 +136,7 @@ public class PartidaResource {
 		return ResponseEntity.ok().body(list);
 	}
 
+	@PreAuthorize("hasAnyRole('JOGADOR')")
 	@RequestMapping(value = "/responder", method = RequestMethod.POST)
 	public ResponseEntity<Void> answerQuestion(@RequestBody RespostaDTO objDto) throws AuthorizationException,
 	ObjectNotFoundException, ActivationException, IncorrectAlternativeException, InvalidNextQuestionException {

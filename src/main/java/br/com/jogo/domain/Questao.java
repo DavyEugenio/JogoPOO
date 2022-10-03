@@ -25,10 +25,10 @@ public class Questao implements Serializable {
 	private Integer id;
 	private String texto;
 	private int nivel;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "questao_id")
 	private Set<Alternativa> alternativas;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "categoria_id")
 	private Categoria categoria;
 
@@ -86,10 +86,10 @@ public class Questao implements Serializable {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
+
 	@JsonIgnore
 	public Alternativa getCorrectAlternative() {
-		return this.alternativas.stream().filter(x->x.isCorreta()).findFirst().get();
+		return this.alternativas.stream().filter(x -> x.isCorreta()).findFirst().get();
 	}
 
 	@Override
@@ -107,5 +107,5 @@ public class Questao implements Serializable {
 			return false;
 		Questao other = (Questao) obj;
 		return Objects.equals(id, other.id);
-	}	
+	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.jogo.security.exceptions.AuthorizationException;
 import br.com.jogo.security.exceptions.InvalidTokenException;
+import br.com.jogo.services.exceptions.ActivationException;
 import br.com.jogo.services.exceptions.DataIntegrityException;
 import br.com.jogo.services.exceptions.FileException;
 import br.com.jogo.services.exceptions.IncorrectAlternativeException;
@@ -93,6 +94,13 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<StandardError> incorrectAlternativeException(IncorrectAlternativeException e, HttpServletRequest request) {
 		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value(),
 				"Resposta Incorreta", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(err);
+	}
+	
+	@ExceptionHandler(ActivationException.class)
+	public ResponseEntity<StandardError> activationException(IncorrectAlternativeException e, HttpServletRequest request) {
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_ACCEPTABLE.value(),
+				"Partida Inativa", e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(err);
 	}
 }

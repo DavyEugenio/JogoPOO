@@ -99,6 +99,14 @@ public class Jogo {
 		adminService.delete(id);
 	}
 
+	public Admin findAdminByEmail(String email) {
+		Usuario user = findUsuarioByEmail(email);
+		if (!(user instanceof Admin)) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		return (Admin) user;
+	}
+
 	public List<Admin> findAllAdmins() {
 		return adminService.findAll();
 	}
@@ -169,6 +177,10 @@ public class Jogo {
 	public List<ConfiguracaoPartida> findAllConfiguracaoPartidas() {
 		return configuracaoPartidaService.findAll();
 	}
+	
+	public List<ConfiguracaoPartida> findConfiguracaoPartidasPreseteds() {
+		return configuracaoPartidaService.findPreseteds();
+	}
 
 	public void deleteConfiguracaoPartida(Integer id) {
 		configuracaoPartidaService.delete(id);
@@ -220,6 +232,15 @@ public class Jogo {
 		return jogadorService.rank();
 	}
 
+	public Jogador findJogadorByEmail(String email) {
+		Usuario user = findUsuarioByEmail(email);
+		if (!(user instanceof Jogador)) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		return (Jogador) user;
+
+	}
+
 	public URI uploadProfilePictureOfJogador(MultipartFile multipartFile) throws AuthorizationException {
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.hasRole(Role.JOGADOR)) {
@@ -263,7 +284,7 @@ public class Jogo {
 		obj.setCategoria(categoriaService.find(obj.getCategoria().getId()));
 		List<Alternativa> alts = obj.getAlternativas().stream().toList();
 		if (alts != null) {
-			obj.setAlternativas(alternativaService.updateAllByList(obj.getAlternativas(), alts));
+			obj.setAlternativas(alternativaService.updateAllByList(findQuestao(obj.getId()).getAlternativas(), alts));
 		}
 		return questaoService.update(obj);
 	}
@@ -332,7 +353,7 @@ public class Jogo {
 
 	// -----------------------------Usuario-----------------------------
 
-	public Usuario findUsuarioByEmail(String email) throws AuthorizationException {
+	private Usuario findUsuarioByEmail(String email) throws AuthorizationException {
 		UserSS user = UserService.authenticated();
 		if (user == null || !user.getUsername().equals(email)) {
 			throw new AuthorizationException("Acesso negado");
@@ -401,15 +422,18 @@ public class Jogo {
 		Alternativa a = findAlternativa(alternativa.getId());
 		Questao q = questaoService.findByAlternativa(a);
 		if (!rp.getUltimaQuestao().equals(q)) {
-			throw new ObjectNotFoundException("A alternativa Não pertece a uma questao da partida!");
+			throw new ObjectNotFoundException("A alternativa não pertece a uma questao da partida!");
 		}
 		if (a.isCorreta()) {
-			correctAnswer(rp, q);
+			rp = correctAnswer(rp, q);
 		} else {
 			rp.getJogador().addQtdPartidas();
 			rp.setAtiva(false);
+			if (!rp.getConfiguracaoPartida().isPredefinida())
+				rp.getConfiguracaoPartida().toPreseted();
 		}
 		rp = registroPartidaService.update(rp);
+		configuracaoPartidaService.update(rp.getConfiguracaoPartida());
 		if (!a.isCorreta()) {
 			throw new IncorrectAlternativeException(q.getCorrectAlternative());
 		} else {
@@ -419,21 +443,24 @@ public class Jogo {
 		}
 	}
 
-	private void correctAnswer(RegistroPartida rp, Questao q) {
+	private RegistroPartida correctAnswer(RegistroPartida rp, Questao q) {
 		rp.addPontuacao(q.getNivel());
 		rp.getJogador().addPontuacao(q.getNivel());
 		rp.getJogador().addSaldo(q.getNivel());
 		rp.addQuestoes(q);
 		Questao nextQ = nextQuestionRegistroPartida(rp);
 		if (nextQ == null) {
-			rp.setAtiva(false);
 			rp.getJogador().addQtdPartidas();
+			if (!rp.getConfiguracaoPartida().isPredefinida())
+				rp.getConfiguracaoPartida().toPreseted();
+			rp.setAtiva(false);
 		} else {
 			if (!rp.getConfiguracaoPartida().isPredefinida()) {
 				rp.getConfiguracaoPartida().addQuestao(nextQ);
 			}
 		}
 		rp.setUltimaQuestao(nextQ);
+		return rp;
 	}
 
 	private Questao nextQuestionRegistroPartida(RegistroPartida obj) throws InvalidNextQuestionException {
@@ -467,7 +494,7 @@ public class Jogo {
 				nextQ = questaoService.findOneNotIn(obj.getQuestoes());
 			}
 		} catch (ObjectNotFoundException e) {
-			return null;
+			return nextQ;
 		}
 		return nextQ;
 	}

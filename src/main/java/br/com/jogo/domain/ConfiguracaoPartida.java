@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import br.com.jogo.domain.exceptions.AlreadPresetedException;
+
 @Entity
 public class ConfiguracaoPartida implements Serializable {
 
@@ -133,7 +135,17 @@ public class ConfiguracaoPartida implements Serializable {
 	public void setCategorias(Set<Categoria> categorias) {
 		this.categorias = categorias;
 	}
-
+	
+	public void toPreseted() throws AlreadPresetedException {
+		if(!predefinida) {
+			this.categorias.addAll(questoes.stream().map(q -> q.getCategoria()).toList());
+			this.nivel = questoes.stream().map(q -> q.getNivel()).max(Integer::compare).get();
+			this.predefinida = true;
+		} else {
+			throw new AlreadPresetedException();
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -149,13 +161,6 @@ public class ConfiguracaoPartida implements Serializable {
 			return false;
 		ConfiguracaoPartida other = (ConfiguracaoPartida) obj;
 		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public String toString() {
-		return "ConfiguracaoPartida [id=" + id + ", nivel=" + nivel + ", predefinida=" + predefinida
-				+ ", registroPartidas=" + registroPartidas + ", jogador=" + jogador + ", questoes=" + questoes
-				+ ", categorias=" + categorias + "]";
 	}
 
 }
