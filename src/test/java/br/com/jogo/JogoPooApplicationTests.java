@@ -41,7 +41,7 @@ class JogoPooApplicationTests {
 						new Alternativa("Leonardo", false), new Alternativa("Rafael", false)));
 		qService.insert(q);
 	}
-	
+
 	@Test
 	void isPreseted() {
 		ConfiguracaoPartida cp = new ConfiguracaoPartida(jService.find(1), qService.findAll().stream().collect(Collectors.toSet()));
@@ -68,4 +68,20 @@ class JogoPooApplicationTests {
 		rp = jogo.findRegistroPartida(rp.getId());
 		System.out.println(rp.getUltimaQuestao().getTexto());
 	}
+	
+	@Test
+	void findOne1() {
+		System.out.println(qService
+				.findOneNotIn(Set.of(new Questao(1, null, 0, null, null), new Questao(2, null, 0, null, null))));
+		
+	}
+
+	@Test
+	void findQuest() {
+		System.out.println(qService.find(1));
+		qService.find(2);
+		qService.findAll();
+		qService.findOneByNivel(2, Set.of(new Questao(2, null, 0, null, null)));
+	}
+
 }
