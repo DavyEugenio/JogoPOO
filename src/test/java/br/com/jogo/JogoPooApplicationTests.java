@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.jogo.domain.Alternativa;
 import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
+import br.com.jogo.repositories.QuestaoRepository;
 import br.com.jogo.services.QuestaoService;
 
 @SpringBootTest
@@ -16,6 +17,9 @@ class JogoPooApplicationTests {
 
 	@Autowired
 	private QuestaoService qService;
+
+	@Autowired
+	QuestaoRepository qrepository;
 
 	@Test
 	void contextLoads() {
@@ -33,7 +37,6 @@ class JogoPooApplicationTests {
 	void findOne() {
 		System.out.println(qService
 				.findOneNotIn(Set.of(new Questao(1, null, 0, null, null), new Questao(2, null, 0, null, null))));
-		
 	}
 
 	@Test

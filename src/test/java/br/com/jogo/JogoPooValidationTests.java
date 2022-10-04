@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.jogo.domain.Alternativa;
 import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
+import br.com.jogo.repositories.QuestaoRepository;
 import br.com.jogo.services.QuestaoService;
 
 @SpringBootTest
@@ -16,6 +17,9 @@ public class JogoPooValidationTests {
 
 	@Autowired
 	private QuestaoService qService;
+	
+	@Autowired
+	private QuestaoRepository repository;
 
 	@Test
 	void contextLoads() {

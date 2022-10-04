@@ -1,69 +1,57 @@
 package br.com.jogo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import br.com.jogo.domain.Jogador;
+import br.com.jogo.factories.JogadorFactory;
+import br.com.jogo.services.JogadorService;
 
+@SpringBootTest
 public class JogadorTests {
 
-	@SuppressWarnings("unused")
-	@Test
-	public void testJogador() {
-		Jogador jog1 = new Jogador(0, "jose", null, null, null, 0, 0, 0, 0, LocalDate.now().minusDays(1), 0, null);
-	}
-
-	@SuppressWarnings("unused")
-	@Test
-	final void testJogadorString() {
-		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
-	}
+	@Autowired
+	JogadorService jogadorService;
 
 	@Test
 	final void testAddPontuacao() {
-		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
+		Jogador jog = JogadorFactory.generate();
 		jog.addPontuacao(2);
 		assertEquals(2, jog.getPontuacaoTotal());
-		// System.out.println("Pontuacao: " + jog.getPontuacaoTotal());
-	}
-
-	@Test
-	final void testRegisterAccess() {
-		LocalDate today1 = LocalDate.now();
-		LocalDate yesterday1 = LocalDate.now().minusDays(1);
-		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
-		if (today1 != yesterday1) {
-			jog.registerAccess();
-			jog.addPontuacao(1);
-		}
 	}
 
 	@Test
 	final void testAddQtdPartidas() {
-		Jogador jog1 = new Jogador(0, "jose", null, null, null, 0, 0, 0, 0, LocalDate.now().minusDays(1), 0, null);
-		jog1.addQtdPartidas();
+		Jogador jog = JogadorFactory.generate();
+		jog.addQtdPartidas();
+		assertEquals(1, jog.getQtdPartidas());
 	}
 
 	@Test
 	final void testAddSaldo() {
-		Jogador jog1 = new Jogador(0, "jose", null, null, null, 0, 0, 0, 0, LocalDate.now().minusDays(1), 0, null);
-		jog1.addSaldo(100);
+		Jogador jog = JogadorFactory.generate();
+		jog.addSaldo(100);
+		assertEquals(100, jog.getSaldo());
 	}
 
 	@Test
-	final int testGetNumeroPartidas() {
-		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
-		jog.addQtdPartidas();
-		return jog.getNumeroPartidas();
+	void testRegisterAcess() {
+		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "maeeer@gmail.com", "12345678");
+		jog.registerAccess();
+		assertEquals(jog.getUltimoAcesso(), LocalDate.now());
 	}
-
+	
 	@Test
-	final LocalDate testGetUltimoAcesso() {
-		Jogador jog = new Jogador("Marcos André", "marquinhos_katchau", "mar@gmail.com", "12345678");
-		return jog.getUltimoAcesso();
+	void testInsertJogador() {
+		Jogador jog = JogadorFactory.generate();
+		jog = jogadorService.insert(jog);
+		assertNotEquals(jog.getId(), null);
 	}
 
 }
