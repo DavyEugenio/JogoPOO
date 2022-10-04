@@ -18,8 +18,9 @@ public class JogoPooValidationTests {
 	@Autowired
 	private QuestaoService qService;
 	
+	@SuppressWarnings("unused")
 	@Autowired
-	private QuestaoRepository repository;
+	private QuestaoRepository repository; //eh necessarios definir repositorio Autowired para qService nao ser null em repo
 
 	@Test
 	void contextLoads() {
@@ -45,7 +46,6 @@ public class JogoPooValidationTests {
 	@Test
 	void integrationTest() {
 		inserirQuestao1();
-		
 		inserirQuestao2();
 	}
 
