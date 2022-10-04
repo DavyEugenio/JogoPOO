@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.jogo.domain.Questao;
 import br.com.jogo.dto.QuestaoDTO;
 import br.com.jogo.dto.QuestaoNewDTO;
+import br.com.jogo.dto.QuestaoUpdateDTO;
 import br.com.jogo.facade.Jogo;
 
 @RestController
@@ -31,7 +33,8 @@ public class QuestaoResource {
 		Questao obj = jogo.findQuestao(id);
 		return ResponseEntity.ok().body(obj);
 	}
-
+	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody QuestaoNewDTO objNewDto) {
 		Questao obj = jogo.insertQuestao(objNewDto.toEntity());
@@ -39,14 +42,16 @@ public class QuestaoResource {
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Void> update(@Valid @RequestBody QuestaoDTO objDto, @PathVariable Integer id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody QuestaoUpdateDTO objDto, @PathVariable Integer id) {
 		Questao obj = objDto.toEntity();
 		obj.setId(id);
 		jogo.updateQuestao(obj);
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		jogo.deleteQuestao(id);

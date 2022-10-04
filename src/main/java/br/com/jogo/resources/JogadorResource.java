@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +36,12 @@ public class JogadorResource {
 		Jogador obj = jogo.findJogador(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
+	@PreAuthorize("hasAnyRole('JOGADOR')")
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public ResponseEntity<Jogador> findByEmail(@RequestParam(value = "value") String email) throws AuthorizationException {
-		Jogador obj = (Jogador) jogo.findUsuarioByEmail(email);
+	public ResponseEntity<Jogador> findByEmail(@RequestParam(value = "value") String email)
+			throws AuthorizationException {
+		Jogador obj = (Jogador) jogo.findJogadorByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}
 
@@ -63,28 +66,31 @@ public class JogadorResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		List<Jogador> list = jogo.findAllJogadores();
 		List<UsuarioDTO> listDto = list.stream().map(obj -> new UsuarioDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
-	
+
 	@RequestMapping(value = "/ranking", method = RequestMethod.GET)
 	public ResponseEntity<List<RankingDTO>> rank() {
 		List<Jogador> list = jogo.rankJogadores();
-		List<RankingDTO> listDto = list.stream().map(obj -> new RankingDTO(obj, obj.getPontuacaoTotal())).collect(Collectors.toList());
+		List<RankingDTO> listDto = list.stream().map(obj -> new RankingDTO(obj, obj.getPontuacaoTotal()))
+				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDto);
 	}
-	
+
 	@RequestMapping(value = "/picture", method = RequestMethod.POST)
-	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) throws AuthorizationException{
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file)
+			throws AuthorizationException {
 		URI uri = jogo.uploadProfilePictureOfJogador(file);
 		return ResponseEntity.created(uri).build();
 	}
 
 	@RequestMapping(value = "/picture", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deleteProfilePicture() throws AuthorizationException{
+	public ResponseEntity<Void> deleteProfilePicture() throws AuthorizationException {
 		jogo.deleteProfilePictureOfJogador();
 		return ResponseEntity.noContent().build();
 	}

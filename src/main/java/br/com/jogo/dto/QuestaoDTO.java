@@ -6,9 +6,7 @@ import java.util.stream.Collectors;
 
 import br.com.jogo.domain.Categoria;
 import br.com.jogo.domain.Questao;
-import br.com.jogo.services.validation.QuestaoUpdate;
 
-@QuestaoUpdate
 public class QuestaoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

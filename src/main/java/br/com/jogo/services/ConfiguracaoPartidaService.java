@@ -70,4 +70,8 @@ public class ConfiguracaoPartidaService {
 	public List<ConfiguracaoPartida> findAll() {
 		return repository.findAll();
 	}
+	
+	public List<ConfiguracaoPartida> findPreseteds() {
+		return repository.findByPredefinidaTrue();
+	}
 }

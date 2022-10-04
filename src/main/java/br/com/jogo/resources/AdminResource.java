@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,18 +29,22 @@ public class AdminResource {
 	@Autowired
 	Jogo jogo;
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Admin> find(@PathVariable Integer id) throws AuthorizationException {
 		Admin obj = jogo.findAdmin(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public ResponseEntity<Admin> findByEmail(@RequestParam(value = "value") String email) throws AuthorizationException {
-		Admin obj = (Admin) jogo.findUsuarioByEmail(email);
+	public ResponseEntity<Admin> findByEmail(@RequestParam(value = "value") String email)
+			throws AuthorizationException {
+		Admin obj = (Admin) jogo.findAdminByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Integer> insert(@Valid @RequestBody UsuarioNewDTO objNewDto) {
 		Admin obj = jogo.insertAdmin(objNewDto.toAdmin());
@@ -47,6 +52,7 @@ public class AdminResource {
 		return ResponseEntity.created(uri).body(obj.getId());
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
 		Admin obj = objDto.toAdmin();
@@ -55,12 +61,14 @@ public class AdminResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		jogo.deleteAdmin(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<UsuarioDTO>> findAll() {
 		List<Admin> list = jogo.findAllAdmins();
